@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MySQL Indexing 的差別 – Oslo – Web Developer from iCHEF</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
+這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。
+
+" />
+    <meta property="og:description" content="我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
+這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。
+
+" />
+    
+    <meta name="author" content="Oslo" />
+
+    
+    <meta property="og:title" content="MySQL Indexing 的差別" />
+    <meta property="twitter:title" content="MySQL Indexing 的差別" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Oslo - Web Developer from iCHEF" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://raw.githubusercontent.com/barryclark/jekyll-now/master/images/jekyll-logo.png" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Oslo</a></h1>
+            <p class="site-description">Web Developer from iCHEF</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>MySQL Indexing 的差別</h1>
+
+  <div class="entry">
+    <p>我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
+這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。</p>
+
+<h3 id="section">舉個例子</h3>
+<blockquote>
+  <p>我有username 和 timestamp 的index，當 sql 語法下 where 的時候，MySQL 會根據你的資料量來選擇你適合的 index
+假設以 username 撈出來會有200萬筆，timestamp 撈出來會有500萬筆，這時候 MySQL 會選擇使用 username 來做 index 的 key</p>
+</blockquote>
+
+<blockquote>
+  <p>問題來了，若符合 username 以及 timestamp 的資料可能才3萬筆，每次都要先撈200萬筆以後再去篩選嗎？這樣很慢吧！
+所以 MySQL 又有一種 indexing 的方法是可以合併多個 columns 當 key 的，可以把 username 以及 timestamp 當做 key，這樣 MySQL 排序篩選的時候，會加快許多</p>
+</blockquote>
+
+<blockquote>
+  <p>附帶一提：Mongodb 的 indexing 也可以這麼做唷</p>
+</blockquote>
+
+<p>每個 framework 的設定方法也不一樣，這裡用 Django 當作例子</p>
+
+<p><a href="https://docs.djangoproject.com/en/1.9/ref/models/options/#index-together">Django Reference</a></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>class Meta:
+  index_together = [
+      ["username", "timestamp"],
+  ]
+</code></pre>
+</div>
+<p>這樣即可設定完成</p>
+
+<h1 id="reference">Reference</h1>
+<p>indexing 的方法有兩種，也有些差異，可以參考
+<a href="https://www.percona.com/blog/2014/01/03/multiple-column-index-vs-multiple-indexes-with-mysql-56/">這裡</a></p>
+
+  </div>
+
+  <div class="date">
+    Written on April 25, 2016
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-07T23:53:50+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>如何使用 Machine-Learning 去處理一些非規則性的資料</title><link href="/using-ML-parsing-MOEA-pdf/" rel="alternate" type="text/html" title="如何使用 Machine-Learning 去處理一些非規則性的資料" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>/using-ML-parsing-MOEA-pdf</id><content type="html" xml:base="/using-ML-parsing-MOEA-pdf/">&lt;p&gt;在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 &lt;code class=&quot;highlighter-rouge&quot;&gt;MOEA&lt;/code&gt; 就是其中一個我們會利用的資料。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-08T00:05:09+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>如何使用 Machine-Learning 去處理一些非規則性的資料</title><link href="/using-ML-parsing-MOEA-pdf/" rel="alternate" type="text/html" title="如何使用 Machine-Learning 去處理一些非規則性的資料" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>/using-ML-parsing-MOEA-pdf</id><content type="html" xml:base="/using-ML-parsing-MOEA-pdf/">&lt;p&gt;在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 &lt;code class=&quot;highlighter-rouge&quot;&gt;MOEA&lt;/code&gt; 就是其中一個我們會利用的資料。&lt;/p&gt;
 
 &lt;p&gt;MOEA 會在每個月10號釋出一些公司或者商業的登記資料，這些資料的格式是 &lt;code class=&quot;highlighter-rouge&quot;&gt;PDF&lt;/code&gt;，內容則有點像是 &lt;code class=&quot;highlighter-rouge&quot;&gt;EXCEL&lt;/code&gt;的樣式。&lt;/p&gt;
 
@@ -74,4 +74,37 @@
 &lt;img src=&quot;/img/2016-5-8-using-ML-parsing-MOEA-pdf/KNN_10_STEP_3.png&quot; alt=&quot;pdf&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;這裡可以看出 N 在 1~2 之間的效果會比 4 以上效果來得好，我們可以利用畫出來的結果來決定使用的 N 值
-然而這只有三頁的資料，就可以產生相當程度的分類，機器學習的前途果然不可限量啊！！&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 MOEA 就是其中一個我們會利用的資料。</summary></entry></feed>
+然而這只有三頁的資料，就可以產生相當程度的分類，機器學習的前途果然不可限量啊！！&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 MOEA 就是其中一個我們會利用的資料。</summary></entry><entry><title>MySQL Indexing 的差別</title><link href="/MySQL-indexing-Story/" rel="alternate" type="text/html" title="MySQL Indexing 的差別" /><published>2016-04-25T00:00:00+08:00</published><updated>2016-04-25T00:00:00+08:00</updated><id>/MySQL-indexing-Story</id><content type="html" xml:base="/MySQL-indexing-Story/">&lt;p&gt;我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
+這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;舉個例子&lt;/h3&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;我有username 和 timestamp 的index，當 sql 語法下 where 的時候，MySQL 會根據你的資料量來選擇你適合的 index
+假設以 username 撈出來會有200萬筆，timestamp 撈出來會有500萬筆，這時候 MySQL 會選擇使用 username 來做 index 的 key&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;問題來了，若符合 username 以及 timestamp 的資料可能才3萬筆，每次都要先撈200萬筆以後再去篩選嗎？這樣很慢吧！
+所以 MySQL 又有一種 indexing 的方法是可以合併多個 columns 當 key 的，可以把 username 以及 timestamp 當做 key，這樣 MySQL 排序篩選的時候，會加快許多&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;附帶一提：Mongodb 的 indexing 也可以這麼做唷&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;每個 framework 的設定方法也不一樣，這裡用 Django 當作例子&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.djangoproject.com/en/1.9/ref/models/options/#index-together&quot;&gt;Django Reference&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Meta:
+  index_together = [
+      [&quot;username&quot;, &quot;timestamp&quot;],
+  ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;這樣即可設定完成&lt;/p&gt;
+
+&lt;h1 id=&quot;reference&quot;&gt;Reference&lt;/h1&gt;
+&lt;p&gt;indexing 的方法有兩種，也有些差異，可以參考
+&lt;a href=&quot;https://www.percona.com/blog/2014/01/03/multiple-column-index-vs-multiple-indexes-with-mysql-56/&quot;&gt;這裡&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
+這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。</summary></entry></feed>
