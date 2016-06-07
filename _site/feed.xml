@@ -1,4 +1,124 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-08T00:05:09+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>如何使用 Machine-Learning 去處理一些非規則性的資料</title><link href="/using-ML-parsing-MOEA-pdf/" rel="alternate" type="text/html" title="如何使用 Machine-Learning 去處理一些非規則性的資料" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>/using-ML-parsing-MOEA-pdf</id><content type="html" xml:base="/using-ML-parsing-MOEA-pdf/">&lt;p&gt;在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 &lt;code class=&quot;highlighter-rouge&quot;&gt;MOEA&lt;/code&gt; 就是其中一個我們會利用的資料。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-08T01:21:16+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>Bash Script 的一些簡單範例 Part 1</title><link href="/bash-script-simple-example/" rel="alternate" type="text/html" title="Bash Script 的一些簡單範例 Part 1" /><published>2016-06-08T00:00:00+08:00</published><updated>2016-06-08T00:00:00+08:00</updated><id>/bash-script-simple-example</id><content type="html" xml:base="/bash-script-simple-example/">&lt;h2 id=&quot;bash-script--unix--function&quot;&gt;Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function&lt;/h2&gt;
+
+&lt;h3 id=&quot;outline&quot;&gt;Outline&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;grep + awk&lt;/li&gt;
+  &lt;li&gt;if else&lt;/li&gt;
+  &lt;li&gt;find&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;grep--awk&quot;&gt;grep + awk&lt;/h4&gt;
+&lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
+-rw-r--r--   1 oslo  staff     1 Jun  7 23:44 CNAME
+-rw-r--r--   1 oslo  staff  1077 Jun  7 23:44 LICENSE
+-rw-r--r--   1 oslo  staff  7939 Jun  7 23:44 README.md
+-rw-r--r--   1 oslo  staff  2509 Jun  7 23:53 _config.yml
+drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
+drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
+drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
+drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
+drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;如果說我想要找某些字串，例如 &lt;code class=&quot;highlighter-rouge&quot;&gt;drwxr-xr-x&lt;/code&gt;，可以利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al | grep &quot;drwxr&quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
+drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
+drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
+drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
+drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;若我這時候還想要，某幾欄顯示的東西，例如第三欄這個 file 的 owner，就可以利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;awk&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al | grep &quot;drwxr&quot; | awk &#39;{print $2}&#39;&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oslo
+oslo
+oslo
+oslo
+oslo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h4 id=&quot;if-else&quot;&gt;if else&lt;/h4&gt;
+
+&lt;p&gt;判斷式，判斷是有分一行還是多行&lt;/p&gt;
+
+&lt;p&gt;一行就是在&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; 之前為條件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt; 之間，是成立的時候要做啥&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt; 之後，是不成立的時候要做啥&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[[ $(ls -al | grep &quot;oslo&quot;) = &quot;&quot; ]] &amp;amp;&amp;amp; echo &quot;not found&quot; || echo &quot;found it&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;多行的範例&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果怕一行太多的話，可以最後面使用跳脫字元 &lt;code class=&quot;highlighter-rouge&quot;&gt;\&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;VARIABLE=$(ls -al | grep &quot;oslo&quot;);
+if [[ &quot;$VARIABLE&quot; == &quot;&quot; ]];
+    then
+        echo &quot;not found&quot;
+    else
+        echo &quot;found it&quot;
+fi
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13781216/bash-meaning-of-too-many-arguments-error-from-if-square-brackets&quot;&gt;參考&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;find&quot;&gt;find&lt;/h4&gt;
+
+&lt;p&gt;find 是我覺得真的非常好用的功能，可以找整個資料夾下的所有特定檔案，真的超方便的&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -name &quot;*.png&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; 代表當前目錄&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-type f&lt;/code&gt; 搜尋的類型是檔案&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-name &quot;*.png&quot;&lt;/code&gt; 搜尋副檔名是 png&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果要刪掉檔案可以加上 -delete&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;最後提醒大家，如果想看說明文件的話可以用&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man &amp;lt;你要的內建指令&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man ls
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;離開的話按 q 即可&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary>Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function</summary></entry><entry><title>如何使用 Machine-Learning 去處理一些非規則性的資料</title><link href="/using-ML-parsing-MOEA-pdf/" rel="alternate" type="text/html" title="如何使用 Machine-Learning 去處理一些非規則性的資料" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>/using-ML-parsing-MOEA-pdf</id><content type="html" xml:base="/using-ML-parsing-MOEA-pdf/">&lt;p&gt;在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 &lt;code class=&quot;highlighter-rouge&quot;&gt;MOEA&lt;/code&gt; 就是其中一個我們會利用的資料。&lt;/p&gt;
 
 &lt;p&gt;MOEA 會在每個月10號釋出一些公司或者商業的登記資料，這些資料的格式是 &lt;code class=&quot;highlighter-rouge&quot;&gt;PDF&lt;/code&gt;，內容則有點像是 &lt;code class=&quot;highlighter-rouge&quot;&gt;EXCEL&lt;/code&gt;的樣式。&lt;/p&gt;
 

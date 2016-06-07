@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bash Script 的一些簡單範例 Part 1 – Oslo – Web Developer from iCHEF</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function
+
+" />
+    <meta property="og:description" content="Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function
+
+" />
+    
+    <meta name="author" content="Oslo" />
+
+    
+    <meta property="og:title" content="Bash Script 的一些簡單範例 Part 1" />
+    <meta property="twitter:title" content="Bash Script 的一些簡單範例 Part 1" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Oslo - Web Developer from iCHEF" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://raw.githubusercontent.com/barryclark/jekyll-now/master/images/jekyll-logo.png" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Oslo</a></h1>
+            <p class="site-description">Web Developer from iCHEF</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Bash Script 的一些簡單範例 Part 1</h1>
+
+  <div class="entry">
+    <h2 id="bash-script--unix--function">Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function</h2>
+
+<h3 id="outline">Outline</h3>
+<ul>
+  <li>grep + awk</li>
+  <li>if else</li>
+  <li>find</li>
+</ul>
+
+<h4 id="grep--awk">grep + awk</h4>
+<p>Example : <code class="highlighter-rouge">ls -al</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
+-rw-r--r--   1 oslo  staff     1 Jun  7 23:44 CNAME
+-rw-r--r--   1 oslo  staff  1077 Jun  7 23:44 LICENSE
+-rw-r--r--   1 oslo  staff  7939 Jun  7 23:44 README.md
+-rw-r--r--   1 oslo  staff  2509 Jun  7 23:53 _config.yml
+drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
+drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
+drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
+drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
+drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
+</code></pre>
+</div>
+
+<p>如果說我想要找某些字串，例如 <code class="highlighter-rouge">drwxr-xr-x</code>，可以利用 <code class="highlighter-rouge">grep</code></p>
+
+<p>Example : <code class="highlighter-rouge">ls -al | grep "drwxr"</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
+drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
+drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
+drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
+drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
+</code></pre>
+</div>
+
+<p>若我這時候還想要，某幾欄顯示的東西，例如第三欄這個 file 的 owner，就可以利用 <code class="highlighter-rouge">awk</code></p>
+
+<p>Example : <code class="highlighter-rouge">ls -al | grep "drwxr" | awk '{print $2}'</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>oslo
+oslo
+oslo
+oslo
+oslo
+</code></pre>
+</div>
+
+<hr />
+
+<h4 id="if-else">if else</h4>
+
+<p>判斷式，判斷是有分一行還是多行</p>
+
+<p>一行就是在</p>
+
+<ul>
+  <li><code class="highlighter-rouge">&amp;&amp;</code> 之前為條件</li>
+  <li><code class="highlighter-rouge">&amp;&amp;</code> 和 <code class="highlighter-rouge">||</code> 之間，是成立的時候要做啥</li>
+  <li><code class="highlighter-rouge">||</code> 之後，是不成立的時候要做啥</li>
+</ul>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[[ $(ls -al | grep "oslo") = "" ]] &amp;&amp; echo "not found" || echo "found it"
+</code></pre>
+</div>
+
+<p>多行的範例</p>
+
+<blockquote>
+  <p>如果怕一行太多的話，可以最後面使用跳脫字元 <code class="highlighter-rouge">\</code></p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>VARIABLE=$(ls -al | grep "oslo");
+if [[ "$VARIABLE" == "" ]];
+    then
+        echo "not found"
+    else
+        echo "found it"
+fi
+
+</code></pre>
+</div>
+
+<p><a href="http://stackoverflow.com/questions/13781216/bash-meaning-of-too-many-arguments-error-from-if-square-brackets">參考</a></p>
+
+<h4 id="find">find</h4>
+
+<p>find 是我覺得真的非常好用的功能，可以找整個資料夾下的所有特定檔案，真的超方便的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>find . -type f -name "*.png"
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">.</code> 代表當前目錄</li>
+  <li><code class="highlighter-rouge">-type f</code> 搜尋的類型是檔案</li>
+  <li><code class="highlighter-rouge">-name "*.png"</code> 搜尋副檔名是 png</li>
+</ul>
+
+<blockquote>
+  <p>如果要刪掉檔案可以加上 -delete</p>
+</blockquote>
+
+<p>最後提醒大家，如果想看說明文件的話可以用</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>man &lt;你要的內建指令&gt;
+</code></pre>
+</div>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>man ls
+</code></pre>
+</div>
+
+<blockquote>
+  <p>離開的話按 q 即可</p>
+</blockquote>
+
+  </div>
+
+  <div class="date">
+    Written on June  8, 2016
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
