@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>在 AWS Lambda python 執行帶有 C module 的 libs – Oslo – Web Developer from iCHEF</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug ，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。
+
+" />
+    <meta property="og:description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug ，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。
+
+" />
+    
+    <meta name="author" content="Oslo" />
+
+    
+    <meta property="og:title" content="在 AWS Lambda python 執行帶有 C module 的 libs" />
+    <meta property="twitter:title" content="在 AWS Lambda python 執行帶有 C module 的 libs" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Oslo - Web Developer from iCHEF" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://raw.githubusercontent.com/barryclark/jekyll-now/master/images/jekyll-logo.png" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Oslo</a></h1>
+            <p class="site-description">Web Developer from iCHEF</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>在 AWS Lambda python 執行帶有 C module 的 libs</h1>
+
+  <div class="entry">
+    <p>AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug ，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</p>
+
+<p>如果你是用 Mac OSX 系統開發的話，在一般情形下，只要照 <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html">AWS 官方文件</a>上建議的方法，包成zip，就可以執行了，但要用含有 C module 的 libs，像是 Matplotlib, Pandas, Numpy, Scipy 等等的，就會遇到意想不到的事情。</p>
+
+<p>根據同事的解釋，雖然 Mac OSX 也算是 Unix 系統，但實際 compile C module 的方法還是有些微的不同，如果要在AWS Lambda 上執行上述的ｌibs，網路上很多文章都建議開一台 EC2 先打包好(建議是zip)再丟到 S3 上，這樣執行起來就沒什麼問題了。</p>
+
+<blockquote>
+  <p>Tips：</p>
+
+  <p>如果想要 packaging/update 主要的程式的話，可以將上述包好的檔案(zip)檔案，下載回來再自行刪除，更新或者增加上去</p>
+</blockquote>
+
+  </div>
+
+  <div class="date">
+    Written on June 11, 2016
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
