@@ -1,4 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-12T23:31:33+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>在 AWS Lambda python 執行帶有 C module 的 libs</title><link href="/aws-lambda-with-c-module/" rel="alternate" type="text/html" title="在 AWS Lambda python 執行帶有 C module 的 libs" /><published>2016-06-11T00:00:00+08:00</published><updated>2016-06-11T00:00:00+08:00</updated><id>/aws-lambda-with-c-module</id><content type="html" xml:base="/aws-lambda-with-c-module/">&lt;p&gt;AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-13T00:16:23+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>AWS 的 ELB 與 Nginx 的愛恨糾葛</title><link href="/aws-elb-nginx/" rel="alternate" type="text/html" title="AWS 的 ELB 與 Nginx 的愛恨糾葛" /><published>2016-06-12T00:00:00+08:00</published><updated>2016-06-12T00:00:00+08:00</updated><id>/aws-elb-nginx</id><content type="html" xml:base="/aws-elb-nginx/">&lt;h3 id=&quot;aws-elb--nginx&quot;&gt;當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ELB
+    &lt;ul&gt;
+      &lt;li&gt;我們先來談談 ELB 的 IP 機制，之所以 ELB 給你 DNS (註1) 是因為他每過數個小時之後會更換 IP，而且一個 DNS ，至少會有兩個以上的 IP，就是這樣才會使用好用的 DNS (DNS可以幹嘛？有空的話我再發文介紹吧～)&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;這種機制不管是在 internal 或者 public ELB 上都是一樣的唷&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Nginx
+    &lt;ul&gt;
+      &lt;li&gt;Nginx 在使用 pass_proxy，如果後面直接給予一個 DNS name 的話，他會先去 Query IP，然後把它儲存起來，而儲存的期限為…一萬年(其實是重新啟動就會更新了)，鑽石恆久遠，IP永流傳，不會自動地更新&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;聰明的客官們發現了這兩者的愛恨糾葛了嗎？&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Nginx 當你使用 pass_proxy 的時候，如果你後面直接使用 ELB 給你的 DNS (不管你後面有沒有把 DNS 做改寫)，過了數小時之後，你會發現很多 request 會開始轉發失敗而導致 502，因為 ELB 的 IP 變了…，不更新就無法轉送了&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;舉個有趣的例子，Nginx 好比一個木訥男，AWS ELB 好比一個時尚女人，木訥男要到時尚女的電話就死背著不忘，但時尚女三天兩頭就換個電話號碼，木訥男，大概也只有前幾天能連絡到時尚女吧(煙…&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;解法其實蠻簡單的，將轉向的網址設成變數，這樣每次 Nginx(木訥男) 的 &lt;a href=&quot;http://serverfault.com/questions/240476/how-to-force-nginx-to-resolve-dns-of-a-dynamic-hostname-everytime-when-doing-p&quot;&gt;Cache 只會儲存 5 分鐘&lt;/a&gt;(變成記憶力好比金魚的健忘男(誤..)&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resolver 10.0.0.0+2/16 # 可以參考 AWS DNS (註2);
+set $upstream_endpoint http://xxxx.elb.amazonaws.com;
+location / {
+    proxy_pass $upstream_endpoint;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Nginx pass_roxy 裡面有提到&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;A server name, its port and the passed URI can also be specified using variables:
+
+proxy_pass http://$host$uri;
+or even like this:
+
+proxy_pass $request;
+In this case, the server name is searched among the described server groups, and, if not found, is determined using a resolver.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;註1. &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F&quot;&gt;Domain Name System&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;註2. &lt;a href=&quot;http://docs.aws.amazon.com/zh_cn/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html#AmazonDNS&quot;&gt;AWS DNS&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;參考 http://tenzer.dk/nginx-with-dynamic-upstreams/&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…</summary></entry><entry><title>在 AWS Lambda python 執行帶有 C module 的 libs</title><link href="/aws-lambda-with-c-module/" rel="alternate" type="text/html" title="在 AWS Lambda python 執行帶有 C module 的 libs" /><published>2016-06-11T00:00:00+08:00</published><updated>2016-06-11T00:00:00+08:00</updated><id>/aws-lambda-with-c-module</id><content type="html" xml:base="/aws-lambda-with-c-module/">&lt;p&gt;AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。&lt;/p&gt;
 
 &lt;p&gt;如果你是用 Mac OSX 系統開發的話，在一般情形下，只要照 &lt;a href=&quot;http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html&quot;&gt;AWS 官方文件&lt;/a&gt;上建議的方法，包成zip，就可以執行了，但要用含有 C module 的 libs，像是 Matplotlib, Pandas, Numpy, Scipy 等等的，就會遇到意想不到的事情。&lt;/p&gt;
 
