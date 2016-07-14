@@ -1,4 +1,140 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-06-13T00:16:23+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>AWS 的 ELB 與 Nginx 的愛恨糾葛</title><link href="/aws-elb-nginx/" rel="alternate" type="text/html" title="AWS 的 ELB 與 Nginx 的愛恨糾葛" /><published>2016-06-12T00:00:00+08:00</published><updated>2016-06-12T00:00:00+08:00</updated><id>/aws-elb-nginx</id><content type="html" xml:base="/aws-elb-nginx/">&lt;h3 id=&quot;aws-elb--nginx&quot;&gt;當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2016-07-15T00:20:00+08:00</updated><id>/</id><title>Oslo</title><subtitle>Web Developer from iCHEF</subtitle><entry><title>數值分析名詞紀錄</title><link href="/useful-command-or-function/" rel="alternate" type="text/html" title="數值分析名詞紀錄" /><published>2016-07-04T00:00:00+08:00</published><updated>2016-07-04T00:00:00+08:00</updated><id>/useful-command-or-function</id><content type="html" xml:base="/useful-command-or-function/">&lt;h1 id=&quot;story&quot;&gt;Story&lt;/h1&gt;
+&lt;p&gt;最近發現，之前有些 google 過的東西，但是要再拿出來用的時候，突然忘記當初的關鍵字是下什麼了，又很緊急的要用，所以這次決定要把它記下來
+(畢竟母語不是英文，常常會想不到對應的單字或者關鍵字)&lt;/p&gt;
+
+&lt;h2 id=&quot;consecutive&quot;&gt;Consecutive&lt;/h2&gt;
+&lt;p&gt;在數據分析很常用到的名詞，是來判斷 data 的連續性。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;原理是一個都是數字的 array，然後 duplicate 一份，原本的數值是 +1，兩個 array 再相減，大於 1 的就是不連續了。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;這點在 Numpy 上會很好作業，也只要一行就可以達成了&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def consecutive(data, step_size=1):
+    &quot;&quot;&quot;
+    :param data:
+    :param int step_size: split size
+    :rtype: np.array
+    &quot;&quot;&quot;
+    return np.array(np.split(np.array(data), np.where(np.diff(data) != step_size)[0] + 1))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;np.diff(array)&lt;/code&gt; 會幫你計算 array 內，前一個與後一個的差值，回傳的結果是差值的 array&lt;/li&gt;
+    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;np.where(condition)&lt;/code&gt; 內是條件，找出條件為 True 的地方&lt;/li&gt;
+    &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;np.split(array, split_index_list)&lt;/code&gt; 為切開 data， 後面的參數是要切開的 index 的 list&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;rolling-window&quot;&gt;Rolling Window&lt;/h2&gt;
+&lt;p&gt;一樣在數值分析上很常碰到的名詞&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;我一連串的 Array 我需要計算移動平均(moving average)，就會需要用到，通常可以用來預測一些 pattern&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3, 4, 5]&lt;/code&gt; 的 array 想要變成 &lt;code class=&quot;highlighter-rouge&quot;&gt;[[1, 2], [2, 3], [3, 4], [4, 5]]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##  特別注意：如果陣列小於 window 會出現問題。
+def rolling_window(data_series, window):
+    &quot;&quot;&quot;
+    :param np.array data_series:
+    :param int window:
+    :rtype: np.array
+    &quot;&quot;&quot;
+    shape = data_series.shape[:-1] + (data_series.shape[-1] - window + 1, window)
+    strides = data_series.strides + (data_series.strides[-1],)
+    return np.lib.stride_tricks.as_strided(data_series, shape=shape, strides=strides)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;shape&lt;/code&gt; 代表 array 的 (i, j)，此段主要是表示我切好後，array 應該是要長什麼模樣&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;strides&lt;/code&gt; 代表字符的 byte 的組數&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1, 3, 5, 7])
+&amp;gt;&amp;gt;&amp;gt; a.strides
+(8, )
+&amp;gt;&amp;gt;&amp;gt; b = np.array([1, 3, 5, 7], [2, 2, 3, 4])
+&amp;gt;&amp;gt;&amp;gt; b.strides
+(32, 8)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;記憶體儲存這組 a array 是 8 byte(int64, 4 byte -&amp;gt; int32), 當變成二維陣列的時候，記憶體要跳過 32個(8*4) byte來到達鄰近的下一個區塊&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;個人想像成是用來描述 記憶體區塊的數值，舉個例子(int64為例子)&lt;/p&gt;
+
+&lt;p&gt;each array have 3 elements&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1D array shape (3,) strides (8, )
+2D array shape (2, 3) strides (24, 8)
+3D array shape (4, 2, 3) strides (48, 24, 8)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;公式&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1D array 8
+2D array 8 * 3 shape(x, 3) = (24, 8)
+3D array 8 * 3 * 2 shape(y, 2, 3) = (48, 24, 8)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;想成數學式子算是我的另一種見解吧XD&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;np.lib.stride_tricks.as_strided&lt;/code&gt; 則是將其重組&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;rolling_window我們預期想要的結果是將結果多一個維度，以一維陣列來說&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1,2,3,4])
+&amp;gt;&amp;gt;&amp;gt; rolling_window(a, 2)  #  兩個元素為一組來切
+[[1,2], [2,3], [3,4]]   #  預期結果
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;所以&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第一行，表示我想要將一維 &lt;code class=&quot;highlighter-rouge&quot;&gt;(4, )&lt;/code&gt; 轉成 &lt;code class=&quot;highlighter-rouge&quot;&gt;(3, 2)&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;第二行，表示我要將一維 byte &lt;code class=&quot;highlighter-rouge&quot;&gt;(8, )&lt;/code&gt; 轉成 &lt;code class=&quot;highlighter-rouge&quot;&gt;(8, 8)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;有沒有好奇，為啥不是 &lt;code class=&quot;highlighter-rouge&quot;&gt;(16, 8)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;是因為原本只有 4 個數值，最後要變成 6 個數值，如果是 (16, 8) 組的話會變成&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Out[66]:
+array([[         1,          2],
+       [         3,          4],
+       [4459105896, 4459105896]])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;就會變成 &lt;code class=&quot;highlighter-rouge&quot;&gt;(8, )&lt;/code&gt; 組，會變成 reshape 直接對半切開，少的用 int64 最大值補上&lt;/p&gt;
+
+&lt;p&gt;而 &lt;code class=&quot;highlighter-rouge&quot;&gt;(8, 8)&lt;/code&gt; 組，則會 shift 一組 byte 而達到 rolling_window 的目的。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;這裡相當的抽象，用文字可能很難打，一開始建議以一維配上少量的元素來試試看在程式碼內玩，或許會比較好理解。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Reference:
+ &lt;a href=&quot;http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.strides.html&quot;&gt;numpy.ndarray.strides&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>Story
+最近發現，之前有些 google 過的東西，但是要再拿出來用的時候，突然忘記當初的關鍵字是下什麼了，又很緊急的要用，所以這次決定要把它記下來
+(畢竟母語不是英文，常常會想不到對應的單字或者關鍵字)</summary></entry><entry><title>AWS 的 ELB 與 Nginx 的愛恨糾葛</title><link href="/aws-elb-nginx/" rel="alternate" type="text/html" title="AWS 的 ELB 與 Nginx 的愛恨糾葛" /><published>2016-06-12T00:00:00+08:00</published><updated>2016-06-12T00:00:00+08:00</updated><id>/aws-elb-nginx</id><content type="html" xml:base="/aws-elb-nginx/">&lt;h3 id=&quot;aws-elb--nginx&quot;&gt;當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;ELB
