@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>介紹 AWS 雲端架構 – Oslo – Backend Developer</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="在開始介紹之前，先來談談一般常見的公司架構吧
+
+" />
+    <meta property="og:description" content="在開始介紹之前，先來談談一般常見的公司架構吧
+
+" />
+    
+    <meta name="author" content="Oslo" />
+
+    
+    <meta property="og:title" content="介紹 AWS 雲端架構" />
+    <meta property="twitter:title" content="介紹 AWS 雲端架構" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Oslo - Backend Developer" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars3.githubusercontent.com/u/5058547?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Oslo</a></h1>
+            <p class="site-description">Backend Developer</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>介紹 AWS 雲端架構</h1>
+
+  <div class="entry">
+    <h3 id="section">在開始介紹之前，先來談談一般常見的公司架構吧</h3>
+
+<h3 id="section-1">架構</h3>
+<p>首先，一個中大型公司以上的公司，因為不同的專業，所以會有 <em><strong>部門</strong></em> 的存在，在部門之中。 
+在部門之中，通常也會分成 <em><strong>對外</strong></em> 以及 <em><strong>內部</strong></em> 
+舉個例子來說，對外就比較像是窗口，像是客服、業務…等，內部則是行政、工程…等單位。</p>
+
+<p>其實在雲端的架構上來說，也跟公司的架構非常的類似，我們會有不同的 <code class="highlighter-rouge">Subnet(部門)</code> 來區分伺服器的類型。
+伺服器類型其實有 <code class="highlighter-rouge">Public Subnet(對外)</code> 以及 <code class="highlighter-rouge">Private Subnet(內部)</code> 的區分</p>
+
+<ul>
+  <li>對外的類型通常為 <code class="highlighter-rouge">網頁型的伺服器(Application Server)</code>，因為他必須對外開放，才能對一般使用者服務</li>
+  <li>內部的類型通常則為 <code class="highlighter-rouge">資料庫伺服器(DataBase Server)</code>，這些通常是商業機密，通常會有權限，不能讓一般使用者存取的服務</li>
+</ul>
+
+<h3 id="section-2">溝通</h3>
+<p>一般公司都會有總機，總機上有一張 <em><strong>總表</strong></em>，怎麼打是打 <em><strong>內線電話</strong></em>、<em><strong>對外電話</strong></em></p>
+
+<p>當我們伺服器後，伺服器之間要怎麼互相溝通，也是跟部門之間溝通很像，
+我們會有一張 <code class="highlighter-rouge">總表(Route Table)</code>，來管理伺服器之間的溝通能順利</p>
+
+<p>每個伺服器都有各自的 <code class="highlighter-rouge">內線電話號碼(Internal IP)</code>，
+但不是每個伺服器都有 <code class="highlighter-rouge">外線電話號碼(External IP)</code>，會依照安全性、服務性質等等考量而發配</p>
+
+<ul>
+  <li>IP 有分內網以及外網
+    <ul>
+      <li>10.x.x.x, 192.168.x.x, 172.17.x.x 等等都是國際規範的內網IP</li>
+      <li>除了上述之外的都是可以對外的 IP</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="section-3">公司有了，要開始服務了</h1>
+
+<p>假設現有個民眾要來申辦某個業務，通常一開始會先到 <em><strong>某個業務窗口</strong></em>，開始說要申辦怎樣的業務、自己是誰等等的。
+今天假設只有你一人，可能窗口只有一個人替你申辦，但萬一後面很多在排隊，通常就有另外一位員工開另一條線，替後面的人申辦</p>
+
+<p>伺服器也是一樣的道理，有種伺服器叫做 <code class="highlighter-rouge">負載均衡器 (Load Balancer)</code>，
+他會自動分配每個 <code class="highlighter-rouge">請求(request)</code> 到不同的伺服器上，
+伺服器通常是可以同時服務很多人的，但一台伺服器撐不住了，我們就會再開一台一樣的 <code class="highlighter-rouge">自動擴展(Auto Scaleing)</code>，藉此服務更多的人。</p>
+
+
+  </div>
+
+  <div class="date">
+    Written on January  8, 2017
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>

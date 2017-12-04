@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Using another decorator inherit the decorator in python. – Oslo – Backend Developer</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。
+
+" />
+    <meta property="og:description" content="最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。
+
+" />
+    
+    <meta name="author" content="Oslo" />
+
+    
+    <meta property="og:title" content="Using another decorator inherit the decorator in python." />
+    <meta property="twitter:title" content="Using another decorator inherit the decorator in python." />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Oslo - Backend Developer" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars3.githubusercontent.com/u/5058547?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Oslo</a></h1>
+            <p class="site-description">Backend Developer</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Using another decorator inherit the decorator in python.</h1>
+
+  <div class="entry">
+    <p>最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。</p>
+
+<h1 id="section">起因</h1>
+
+<p>最近在寫的 <code class="highlighter-rouge">Unit test</code> 需要 Freeze time，例如我想要每次在 <code class="highlighter-rouge">datetime.now()</code> 的時候都是回傳一樣的時間。</p>
+
+<p>之前用一個 lib 叫做 <a href="https://github.com/spulec/freezegun">Freezegun</a> 他可以利用 <code class="highlighter-rouge">decorator</code> 或 <code class="highlighter-rouge">contextmanager</code> 的方法去使用，非常的方便。</p>
+
+<p>但是，在跑跟資料庫相關的 test cases 的時候發現了一個奇怪的錯誤。</p>
+
+<blockquote>
+  <p>sqlalchemy.exc.ProgrammingError: (mysql.connector.errors.ProgrammingError) Failed processing pyformat-parameters; Python ‘fakedate’ cannot be converted to a MySQL type [SQL: ‘SELECT kpi.time, kpi.level, kpi.ninety_fill \nFROM kpi \nWHERE kpi.time &gt;= %(time_1)s AND kpi.time &lt;= %(time_2)s AND kpi.level = %(level_1)s AND kpi.ship_mode = %(ship_mode_1)s’] [parameters: {‘time_1’: FakeDate(2017, 7, 1), ‘ship_mode_1’: ‘all’, ‘level_1’: ‘p’, ‘time_2’: FakeDate(2017, 7, 31)}]</p>
+</blockquote>
+
+<p>查看了一下MySQL lib原始碼內實作時間轉換的程式</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MySQLConverter</span><span class="p">(</span><span class="n">MySQLConverterBase</span><span class="p">):</span>
+    <span class="o">...</span><span class="p">(</span><span class="err">省略</span><span class="p">)</span><span class="o">...</span>
+    <span class="k">def</span> <span class="nf">to_mysql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="s">"""Convert Python data type to MySQL"""</span>
+        <span class="n">type_name</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">"_{0}_to_mysql"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">))(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="nb">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">TypeError</span><span class="p">(</span><span class="s">"Python '{0}' cannot be converted to a "</span>
+                            <span class="s">"MySQL type"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">))</span>
+    <span class="o">...</span><span class="p">(</span><span class="err">省略</span><span class="p">)</span><span class="o">...</span>
+    <span class="k">def</span> <span class="nf">_datetime_to_mysql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="s">"""
+        Converts a datetime instance to a string suitable for MySQL.
+        The returned string has format: </span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">d </span><span class="si">%</span><span class="s">H:</span><span class="si">%</span><span class="s">M:</span><span class="si">%</span><span class="s">S[.</span><span class="si">%</span><span class="s">f]
+
+        If the instance isn't a datetime.datetime type, it return None.
+
+        Returns a bytes.
+        """</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">microsecond</span><span class="p">:</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s">'{0:d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'</span>
+            <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">second</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">.</span><span class="n">microsecond</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'ascii'</span><span class="p">)</span>
+
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s">'{0:d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'</span>
+        <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">second</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'ascii'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_date_to_mysql</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="s">"""
+        Converts a date instance to a string suitable for MySQL.
+        The returned string has format: </span><span class="si">%</span><span class="s">Y-</span><span class="si">%</span><span class="s">m-</span><span class="si">%</span><span class="s">d
+
+        If the instance isn't a datetime.date type, it return None.
+
+        Returns a bytes.
+        """</span>
+        <span class="k">return</span> <span class="s">'{0:d}-{1:02d}-{2:02d}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">month</span><span class="p">,</span>
+                                              <span class="n">value</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'ascii'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>發現轉換的實作方式是把 object 的 class name 轉成相對應的 method</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">type_name</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">"_{0}_to_mysql"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">type_name</span><span class="p">))(</span><span class="n">value</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p>而當我們使用 <code class="highlighter-rouge">Freezegun</code> 的時候，他會重新把 datetime 的 object 變成 FakeDate/FakeDatetime，所以 class name 會跟相對應的 method 會對不起來(沒有 _fakedate_to_mysql 這個method)，因為此時 class name 變成了 FakeDate/FakeDatetime。</p>
+
+<p>所以就會造成錯誤了。</p>
+
+<h1 id="section-1">解法</h1>
+
+<p>其實知道原因之後解法還蠻簡單的。</p>
+
+<ol>
+  <li>
+    <p>換 lib 。</p>
+  </li>
+  <li>
+    <p>掛完 decorator 之後就把 FakeDate/FakeDatetime 的 class name 改成 date/datetime。</p>
+  </li>
+</ol>
+
+<p>我選擇 <code class="highlighter-rouge">2.</code> ，因為換了 lib 說不定又會碰到其他坑。</p>
+
+<p>所以程式改起來會像是</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyTestCases</span><span class="p">(</span><span class="n">unittest</span><span class="p">):</span>
+
+    <span class="nd">@freeze_time</span><span class="p">(</span><span class="s">"2017-12-03"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_case_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s">"datetime"</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s">"date"</span>
+        <span class="n">do_test_here</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>但是這樣還有一個問題，就是你每個會查詢 MySQL 的 test case 都要加上這兩行，實在有夠麻煩。</p>
+
+<p>所以衍伸出了像是用另一個decorator去繼承decorator的想法(從 class 繼承的概念衍伸出來的)。</p>
+
+<p>實作出來會像是下面這樣</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">hijack_freeze_time</span><span class="p">(</span><span class="o">*</span><span class="n">hijack_args</span><span class="p">,</span> <span class="o">**</span><span class="n">hijack_kwargs</span><span class="p">):</span>
+    <span class="s">"""
+    Fixed MySQL Lib type converter's issue
+    TypeError: Python 'fakedate' cannot be converted to a MySQL type
+    """</span>
+    <span class="k">def</span> <span class="nf">outer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@freeze_time</span><span class="p">(</span><span class="o">*</span><span class="n">hijack_args</span><span class="p">,</span> <span class="o">**</span><span class="n">hijack_kwargs</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s">"datetime"</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s">"date"</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">outer</span>
+</code></pre>
+</div>
+
+<p>實際用起來就會像是</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyTestCases</span><span class="p">(</span><span class="n">unittest</span><span class="p">):</span>
+
+    <span class="nd">@hijack_freeze_time</span><span class="p">(</span><span class="s">"2017-12-03"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_case_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">do_test_here</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>跟原本方式一樣，簡單多了(名字變了，更甚者，可以連名字都一樣，改 import 路徑就好)。</p>
+
+  </div>
+
+  <div class="date">
+    Written on December  3, 2017
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>
