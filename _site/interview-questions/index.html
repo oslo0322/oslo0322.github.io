@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Interview Questions for Backend developer. – Oslo – Backend Developer</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。
+
+" />
+    <meta property="og:description" content="最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。
+
+" />
+    
+    <meta name="author" content="Oslo" />
+
+    
+    <meta property="og:title" content="Interview Questions for Backend developer." />
+    <meta property="twitter:title" content="Interview Questions for Backend developer." />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Oslo - Backend Developer" href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars3.githubusercontent.com/u/5058547?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Oslo</a></h1>
+            <p class="site-description">Backend Developer</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Interview Questions for Backend developer.</h1>
+
+  <div class="entry">
+    <p>最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。</p>
+
+<h1 id="process-vs-thread">Process vs Thread</h1>
+<p>這大概是問最多的基本題吧，就連 <a href="https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;tab=votes#tab-top">StackOverflow</a> 上面也是超多人在問的。
+* <a href="http://web.archive.org/web/20100807021758/http://kquest.co.cc/2010/03/program-process-task-thread">Also</a>
+* <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx">微軟提供的</a></p>
+
+<p>我覺得一開始可以這樣說：</p>
+
+<p>每個 Process 都有提供需要的資源去執行程式，一個 Process 會有獨立的 process id、環境變數以及至少一個 Thread 來執行，當然，可以增加額外的 Tread。</p>
+
+<blockquote>
+  <p>意即每個 Process 處於不同的記憶體空間上，所以無法分享記憶體。</p>
+</blockquote>
+
+<p>每個 Thread 則是在 Process 之下，可以被排程執行，所有的 Thread 共用相通的資源以及記憶體空間上，每個 Thread 有自己獨立的 Thread id 跟 local storage.</p>
+
+<blockquote>
+  <p>意即每個 Thread 處於相同的記憶體空間上，所以是分享記憶體的。</p>
+</blockquote>
+
+<p>用日常生活的方式舉個例子的話，比較像是高速公路的概念。</p>
+
+<p>國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。</p>
+
+<h2 id="section">筆記</h2>
+
+<h3 id="apache">Apache</h3>
+<p>後來又看到 <a href="http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html">mode_wsgi的這篇</a>，裡面提到了Apache提供了三種不同的Mode
+||Multi-Process|Multi-Thread|
+|—–|:—–:|—–|
+|Prefork|Yes|No|
+|Worker|Yes|Yes|
+|Winnt|No|Yes|
+—-
+Worker 文件也提到了 <code class="highlighter-rouge">Python GIL</code> 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。</p>
+
+<p>我也好奇 Worker 是如何產生 Process/Thread 的，其實概念也蠻簡單的，就是先把Process 內的 Thread 塞滿，滿了之後再開 Child Process 依此類推。</p>
+
+<h3 id="nginx">Nginx</h3>
+<p><a href="https://www.reddit.com/r/Python/comments/4s40ge/understanding_uwsgi_threads_processes_and_gil/">Nginx+uWSGI</a> 這篇看來，uWSGI則沒有處理 GIL 的問題，如果有碰到 I/O bound的問題，看來還是只能乖乖地關掉 thread 了(QQ)</p>
+
+<h1 id="copy-on-write">Copy On Write</h1>
+
+<h1 id="thread-safe">Thread-Safe</h1>
+
+<h1 id="whats-the-different-between-http-methods-post-and-get">What’s the different between HTTP methods POST and GET?</h1>
+
+<p>一開始的想法比較像是用 <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> 的想法用 <code class="highlighter-rouge">Resource</code> 的角度去描述的，但後來對方問更深，就倒了…</p>
+
+<p>回家後查了一下<a href="https://www.diffen.com/difference/GET-vs-POST-HTTP-Requests">Source</a>，其實有很多是知道的，但當下沒想到，有點可惜，順便截取一些重點。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: center">GET</th>
+      <th>POST</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>History 參數會被存</td>
+      <td style="text-align: center">Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Bookmarked</td>
+      <td style="text-align: center">Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>參數(Parameters)</td>
+      <td style="text-align: center">Yes</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Data Type 限制</td>
+      <td style="text-align: center">ASCII</td>
+      <td>無限制，Binary也可以，所以可以傳檔案</td>
+    </tr>
+    <tr>
+      <td>Data length 限制</td>
+      <td style="text-align: center">2048個字元上限</td>
+      <td>無</td>
+    </tr>
+    <tr>
+      <td><strong>Cached</strong></td>
+      <td style="text-align: center">Yes</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="what-is-rest-and-restful">What is REST and RESTful?</h1>
+
+<p>REST 是 <code class="highlighter-rouge">Representational State Transfer</code> 的縮寫，是一種傳輸資料的『風格』不是一種『標準』，利用 HTTP methods(GET/POST/PUT/PATCH/DELETE) 等等不同的操作來對伺服器的資源做管理。
+具有幾個特點：</p>
+
+<ul>
+  <li>以資源為基礎</li>
+  <li>統一的介面</li>
+  <li>無狀態(Stateless)</li>
+  <li>Client-server architecture</li>
+  <li>Cacheability</li>
+  <li>Layered system</li>
+</ul>
+
+<p>而具有 <code class="highlighter-rouge">REST</code> 風格的API，就是 RESTful API。</p>
+
+<h1 id="how-csrf-token-be-generated">How CSRF token be generated?</h1>
+<p>上次被問到如何解決 CSRF 攻擊的問題，我提到了利用 CSRF token 可以解決，而對方問到了更深入，那你知道 CSRF token 是如何產生的嗎？
+當初猜是類似用 One-Time password 到方式，伺服器端有存密鑰，然後依照時間產生一組時間內有效的 token 放在 Database 內。</p>
+
+<p>後來查到這裡有解釋如何產生的<a href="https://stackoverflow.com/questions/8655817/csrf-protection-do-we-have-to-generate-a-token-for-every-form">Source</a></p>
+
+<p>裡面提到，通常是用 per-session 的方式產生的，隨機產生一組 token 放入 session 內，session id 跟 token 會傳給 client，如果回來的 session id 與 token 是一樣的，就是有效的。</p>
+
+<p>更甚者，如果要更安全，可以每次產生表單或者每個 request的時候都產生一次，但會把整個設計變得相當複雜。</p>
+
+<p>在<a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#General_Recommendation:_Synchronizer_Token_Pattern">這裡</a>提到</p>
+
+<h4 id="synchronizer-csrf-tokens">Synchronizer (CSRF) Tokens</h4>
+<ul>
+  <li>Any state changing operation requires a secure random token (e.g., CSRF token) to prevent CSRF attacks</li>
+  <li>Characteristics of a CSRF Token</li>
+  <li>Unique per user <strong><em>session</em></strong></li>
+  <li>Large random value</li>
+  <li>Generated by a cryptographically secure random number generator</li>
+  <li>The CSRF token is added as a hidden field for forms or within the URL if the state changing operation occurs via a GET</li>
+  <li>The server rejects the requested action if the CSRF token fails validation</li>
+</ul>
+
+  </div>
+
+  <div class="date">
+    Written on December 19, 2017
+  </div>
+
+  
+</article>
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+
+
+
+<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+
+
+
+
+
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+
+  </body>
+</html>

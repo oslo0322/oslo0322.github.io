@@ -1,4 +1,135 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-12-04T11:44:09+08:00</updated><id>/</id><title>Oslo</title><subtitle>Backend Developer</subtitle><entry><title>Using another decorator inherit the decorator in python.</title><link href="/override-decorator/" rel="alternate" type="text/html" title="Using another decorator inherit the decorator in python." /><published>2017-12-03T00:00:00+08:00</published><updated>2017-12-03T00:00:00+08:00</updated><id>/override-decorator</id><content type="html" xml:base="/override-decorator/">&lt;p&gt;最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-12-20T10:30:32+08:00</updated><id>/</id><title>Oslo</title><subtitle>Backend Developer</subtitle><entry><title>Interview Questions for Backend developer.</title><link href="/interview-questions/" rel="alternate" type="text/html" title="Interview Questions for Backend developer." /><published>2017-12-19T00:00:00+08:00</published><updated>2017-12-19T00:00:00+08:00</updated><id>/interview-questions</id><content type="html" xml:base="/interview-questions/">&lt;p&gt;最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。&lt;/p&gt;
+
+&lt;h1 id=&quot;process-vs-thread&quot;&gt;Process vs Thread&lt;/h1&gt;
+&lt;p&gt;這大概是問最多的基本題吧，就連 &lt;a href=&quot;https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;amp;tab=votes#tab-top&quot;&gt;StackOverflow&lt;/a&gt; 上面也是超多人在問的。
+* &lt;a href=&quot;http://web.archive.org/web/20100807021758/http://kquest.co.cc/2010/03/program-process-task-thread&quot;&gt;Also&lt;/a&gt;
+* &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx&quot;&gt;微軟提供的&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;我覺得一開始可以這樣說：&lt;/p&gt;
+
+&lt;p&gt;每個 Process 都有提供需要的資源去執行程式，一個 Process 會有獨立的 process id、環境變數以及至少一個 Thread 來執行，當然，可以增加額外的 Tread。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;意即每個 Process 處於不同的記憶體空間上，所以無法分享記憶體。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;每個 Thread 則是在 Process 之下，可以被排程執行，所有的 Thread 共用相通的資源以及記憶體空間上，每個 Thread 有自己獨立的 Thread id 跟 local storage.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;意即每個 Thread 處於相同的記憶體空間上，所以是分享記憶體的。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;用日常生活的方式舉個例子的話，比較像是高速公路的概念。&lt;/p&gt;
+
+&lt;p&gt;國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;筆記&lt;/h2&gt;
+
+&lt;h3 id=&quot;apache&quot;&gt;Apache&lt;/h3&gt;
+&lt;p&gt;後來又看到 &lt;a href=&quot;http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html&quot;&gt;mode_wsgi的這篇&lt;/a&gt;，裡面提到了Apache提供了三種不同的Mode
+||Multi-Process|Multi-Thread|
+|—–|:—–:|—–|
+|Prefork|Yes|No|
+|Worker|Yes|Yes|
+|Winnt|No|Yes|
+—-
+Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python GIL&lt;/code&gt; 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。&lt;/p&gt;
+
+&lt;p&gt;我也好奇 Worker 是如何產生 Process/Thread 的，其實概念也蠻簡單的，就是先把Process 內的 Thread 塞滿，滿了之後再開 Child Process 依此類推。&lt;/p&gt;
+
+&lt;h3 id=&quot;nginx&quot;&gt;Nginx&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/Python/comments/4s40ge/understanding_uwsgi_threads_processes_and_gil/&quot;&gt;Nginx+uWSGI&lt;/a&gt; 這篇看來，uWSGI則沒有處理 GIL 的問題，如果有碰到 I/O bound的問題，看來還是只能乖乖地關掉 thread 了(QQ)&lt;/p&gt;
+
+&lt;h1 id=&quot;copy-on-write&quot;&gt;Copy On Write&lt;/h1&gt;
+
+&lt;h1 id=&quot;thread-safe&quot;&gt;Thread-Safe&lt;/h1&gt;
+
+&lt;h1 id=&quot;whats-the-different-between-http-methods-post-and-get&quot;&gt;What’s the different between HTTP methods POST and GET?&lt;/h1&gt;
+
+&lt;p&gt;一開始的想法比較像是用 &lt;a href=&quot;https://en.wikipedia.org/wiki/Representational_state_transfer&quot;&gt;REST&lt;/a&gt; 的想法用 &lt;code class=&quot;highlighter-rouge&quot;&gt;Resource&lt;/code&gt; 的角度去描述的，但後來對方問更深，就倒了…&lt;/p&gt;
+
+&lt;p&gt;回家後查了一下&lt;a href=&quot;https://www.diffen.com/difference/GET-vs-POST-HTTP-Requests&quot;&gt;Source&lt;/a&gt;，其實有很多是知道的，但當下沒想到，有點可惜，順便截取一些重點。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;GET&lt;/th&gt;
+      &lt;th&gt;POST&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;History 參數會被存&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Bookmarked&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;參數(Parameters)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;/td&gt;
+      &lt;td&gt;Yes&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Data Type 限制&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;ASCII&lt;/td&gt;
+      &lt;td&gt;無限制，Binary也可以，所以可以傳檔案&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Data length 限制&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;2048個字元上限&lt;/td&gt;
+      &lt;td&gt;無&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Cached&lt;/strong&gt;&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&quot;what-is-rest-and-restful&quot;&gt;What is REST and RESTful?&lt;/h1&gt;
+
+&lt;p&gt;REST 是 &lt;code class=&quot;highlighter-rouge&quot;&gt;Representational State Transfer&lt;/code&gt; 的縮寫，是一種傳輸資料的『風格』不是一種『標準』，利用 HTTP methods(GET/POST/PUT/PATCH/DELETE) 等等不同的操作來對伺服器的資源做管理。
+具有幾個特點：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;以資源為基礎&lt;/li&gt;
+  &lt;li&gt;統一的介面&lt;/li&gt;
+  &lt;li&gt;無狀態(Stateless)&lt;/li&gt;
+  &lt;li&gt;Client-server architecture&lt;/li&gt;
+  &lt;li&gt;Cacheability&lt;/li&gt;
+  &lt;li&gt;Layered system&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;而具有 &lt;code class=&quot;highlighter-rouge&quot;&gt;REST&lt;/code&gt; 風格的API，就是 RESTful API。&lt;/p&gt;
+
+&lt;h1 id=&quot;how-csrf-token-be-generated&quot;&gt;How CSRF token be generated?&lt;/h1&gt;
+&lt;p&gt;上次被問到如何解決 CSRF 攻擊的問題，我提到了利用 CSRF token 可以解決，而對方問到了更深入，那你知道 CSRF token 是如何產生的嗎？
+當初猜是類似用 One-Time password 到方式，伺服器端有存密鑰，然後依照時間產生一組時間內有效的 token 放在 Database 內。&lt;/p&gt;
+
+&lt;p&gt;後來查到這裡有解釋如何產生的&lt;a href=&quot;https://stackoverflow.com/questions/8655817/csrf-protection-do-we-have-to-generate-a-token-for-every-form&quot;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;裡面提到，通常是用 per-session 的方式產生的，隨機產生一組 token 放入 session 內，session id 跟 token 會傳給 client，如果回來的 session id 與 token 是一樣的，就是有效的。&lt;/p&gt;
+
+&lt;p&gt;更甚者，如果要更安全，可以每次產生表單或者每個 request的時候都產生一次，但會把整個設計變得相當複雜。&lt;/p&gt;
+
+&lt;p&gt;在&lt;a href=&quot;https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#General_Recommendation:_Synchronizer_Token_Pattern&quot;&gt;這裡&lt;/a&gt;提到&lt;/p&gt;
+
+&lt;h4 id=&quot;synchronizer-csrf-tokens&quot;&gt;Synchronizer (CSRF) Tokens&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;Any state changing operation requires a secure random token (e.g., CSRF token) to prevent CSRF attacks&lt;/li&gt;
+  &lt;li&gt;Characteristics of a CSRF Token&lt;/li&gt;
+  &lt;li&gt;Unique per user &lt;strong&gt;&lt;em&gt;session&lt;/em&gt;&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Large random value&lt;/li&gt;
+  &lt;li&gt;Generated by a cryptographically secure random number generator&lt;/li&gt;
+  &lt;li&gt;The CSRF token is added as a hidden field for forms or within the URL if the state changing operation occurs via a GET&lt;/li&gt;
+  &lt;li&gt;The server rejects the requested action if the CSRF token fails validation&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>oslo0322</name></author><summary>最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。</summary></entry><entry><title>Using another decorator inherit the decorator in python.</title><link href="/override-decorator/" rel="alternate" type="text/html" title="Using another decorator inherit the decorator in python." /><published>2017-12-03T00:00:00+08:00</published><updated>2017-12-03T00:00:00+08:00</updated><id>/override-decorator</id><content type="html" xml:base="/override-decorator/">&lt;p&gt;最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。&lt;/p&gt;
 
 &lt;h1 id=&quot;section&quot;&gt;起因&lt;/h1&gt;
 
