@@ -57,7 +57,7 @@
   <h1>AWS 的 ELB 與 Nginx 的愛恨糾葛</h1>
 
   <div class="entry">
-    <h3 id="aws-elb--nginx">當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…</h3>
+    <h3 id="當aws-elb-碰到-nginx剛開始總是那麼地美好但時間久了總是會有些不是盡善盡美的地方">當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…</h3>
 
 <ul>
   <li>ELB
@@ -89,25 +89,23 @@
 
 <p>解法其實蠻簡單的，將轉向的網址設成變數，這樣每次 Nginx(木訥男) 的 <a href="http://serverfault.com/questions/240476/how-to-force-nginx-to-resolve-dns-of-a-dynamic-hostname-everytime-when-doing-p">Cache 只會儲存 5 分鐘</a>(變成記憶力好比金魚的健忘男(誤..)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>resolver 10.0.0.0+2/16 # 可以參考 AWS DNS (註2);
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resolver 10.0.0.0+2/16 # 可以參考 AWS DNS (註2);
 set $upstream_endpoint http://xxxx.elb.amazonaws.com;
 location / {
     proxy_pass $upstream_endpoint;
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Nginx pass_roxy 裡面有提到</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>A server name, its port and the passed URI can also be specified using variables:
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A server name, its port and the passed URI can also be specified using variables:
 
 proxy_pass http://$host$uri;
 or even like this:
 
 proxy_pass $request;
 In this case, the server name is searched among the described server groups, and, if not found, is determined using a resolver.
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>註1. <a href="https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F">Domain Name System</a></p>
 

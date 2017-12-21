@@ -57,7 +57,7 @@
   <h1>Bash Script 的一些簡單範例 Part 1</h1>
 
   <div class="entry">
-    <h2 id="bash-script--unix--function">Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function</h2>
+    <h2 id="bash-script-是-unix-系統內最好也最實用的內建語言常常有些意想不到的-function">Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function</h2>
 
 <h3 id="outline">Outline</h3>
 <ul>
@@ -69,7 +69,7 @@
 <h4 id="grep--awk">grep + awk</h4>
 <p>Example : <code class="highlighter-rouge">ls -al</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
 -rw-r--r--   1 oslo  staff     1 Jun  7 23:44 CNAME
 -rw-r--r--   1 oslo  staff  1077 Jun  7 23:44 LICENSE
 -rw-r--r--   1 oslo  staff  7939 Jun  7 23:44 README.md
@@ -79,32 +79,29 @@ drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
 drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
 drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
 drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>如果說我想要找某些字串，例如 <code class="highlighter-rouge">drwxr-xr-x</code>，可以利用 <code class="highlighter-rouge">grep</code></p>
 
 <p>Example : <code class="highlighter-rouge">ls -al | grep "drwxr"</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
 drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
 drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
 drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
 drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>若我這時候還想要，某幾欄顯示的東西，例如第三欄這個 file 的 owner，就可以利用 <code class="highlighter-rouge">awk</code></p>
 
 <p>Example : <code class="highlighter-rouge">ls -al | grep "drwxr" | awk '{print $2}'</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>oslo
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>oslo
 oslo
 oslo
 oslo
 oslo
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -122,9 +119,8 @@ oslo
 
 <p>Example:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[[ $(ls -al | grep "oslo") = "" ]] &amp;&amp; echo "not found" || echo "found it"
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[ $(ls -al | grep "oslo") = "" ]] &amp;&amp; echo "not found" || echo "found it"
+</code></pre></div></div>
 
 <p>多行的範例</p>
 
@@ -132,7 +128,7 @@ oslo
   <p>如果怕一行太多的話，可以最後面使用跳脫字元 <code class="highlighter-rouge">\</code></p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>VARIABLE=$(ls -al | grep "oslo");
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>VARIABLE=$(ls -al | grep "oslo");
 if [[ "$VARIABLE" == "" ]];
     then
         echo "not found"
@@ -140,8 +136,7 @@ if [[ "$VARIABLE" == "" ]];
         echo "found it"
 fi
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><a href="http://stackoverflow.com/questions/13781216/bash-meaning-of-too-many-arguments-error-from-if-square-brackets">參考</a></p>
 
@@ -149,9 +144,8 @@ fi
 
 <p>find 是我覺得真的非常好用的功能，可以找整個資料夾下的所有特定檔案，真的超方便的</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>find . -type f -name "*.png"
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -type f -name "*.png"
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">.</code> 代表當前目錄</li>
@@ -165,15 +159,13 @@ fi
 
 <p>最後提醒大家，如果想看說明文件的話可以用</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>man &lt;你要的內建指令&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>man &lt;你要的內建指令&gt;
+</code></pre></div></div>
 
 <p>Example:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>man ls
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>man ls
+</code></pre></div></div>
 
 <blockquote>
   <p>離開的話按 q 即可</p>

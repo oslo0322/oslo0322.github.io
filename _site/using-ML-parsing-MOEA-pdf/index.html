@@ -61,9 +61,9 @@
 
 <p>MOEA 會在每個月10號釋出一些公司或者商業的登記資料，這些資料的格式是 <code class="highlighter-rouge">PDF</code>，內容則有點像是 <code class="highlighter-rouge">EXCEL</code>的樣式。</p>
 
-<h2 id="section">分析資料</h2>
+<h2 id="分析資料">分析資料</h2>
 
-<h3 id="section-1">工具</h3>
+<h3 id="工具">工具</h3>
 <p>所謂工欲善其事，必先利其器，分析之前要先準備好工具</p>
 
 <p>而處理的工具，我們使用的是 <code class="highlighter-rouge">python</code>，下面列出最主要的工具</p>
@@ -74,14 +74,14 @@
   <li>pandas/numpy/scipy python 數據分析的好用工具</li>
 </ul>
 
-<h3 id="section-2">思考</h3>
+<h3 id="思考">思考</h3>
 <p>謀定而後動，在開始處理資料之前，我們先來看看我們要處理的資料是什麼樣子</p>
 
 <p><img src="/img/2016-5-8-using-ML-parsing-MOEA-pdf/1.png" alt="pdf" />
 上圖是 PDF 內其中一頁，可以看到大致上跟 <code class="highlighter-rouge">EXCEL</code> 一樣，除了最後面<code class="highlighter-rouge">營業項目說明</code>除外，而通常我們的觀念會想要最後一欄，歸類在同一行的營業人，也就是下圖的概念。
 <img src="/img/2016-5-8-using-ML-parsing-MOEA-pdf/2.png" alt="pdf" /></p>
 
-<h3 id="section-3">工具特性</h3>
+<h3 id="工具特性">工具特性</h3>
 <p>PDFMiner 是將PDF的內容變成座標形式回傳的，以下圖為例</p>
 
 <p>『1』一個字就有一組四個<code class="highlighter-rouge">(x, y)</code>座標，座標是由左下角開始，x往右變大，y往上變大
@@ -96,7 +96,7 @@
   <li>L 表示兩個『詞』之間的垂直距離，如果大於某個值會判斷成兩個斷行</li>
 </ul>
 
-<h3 id="section-4">資料特性</h3>
+<h3 id="資料特性">資料特性</h3>
 <p><img src="/img/2016-5-8-using-ML-parsing-MOEA-pdf/2.png" alt="pdf" />
 上圖可以很清楚地知道，欄位其實在某些地方有些不一樣(藍色線標明的地方)，像是名字因為兩個字置中而導致起始位置跟三個字的地方有些不一樣，大部分欄位都是靠左對齊，資本額的地方卻是靠右對齊，造成起始座標很難歸納出一個範圍。</p>
 
@@ -109,7 +109,7 @@
   <li>y的高度 (484, 515] 屬於最下面序號『8』的營業人</li>
 </ul>
 
-<h2 id="section-5">解決問題</h2>
+<h2 id="解決問題">解決問題</h2>
 <p>上述提到一個問題，欄位因為起始點不同，所以很難歸納出真正的範圍，這時候機器學習就派上用場了</p>
 
 <p>我們要解決的是分群的問題，分群常用的方法就屬於 <code class="highlighter-rouge">KNN</code> 了，<code class="highlighter-rouge">KNN</code> 是一種非監督式的機器學習演算法，簡單來說就是物以類聚的概念，我們利用未知座標 X 最鄰近的 N 個點來判斷 X 是屬於哪一個群組，以下圖為例

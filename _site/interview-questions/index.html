@@ -60,9 +60,11 @@
     <p>最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。</p>
 
 <h1 id="process-vs-thread">Process vs Thread</h1>
-<p>這大概是問最多的基本題吧，就連 <a href="https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;tab=votes#tab-top">StackOverflow</a> 上面也是超多人在問的。
-* <a href="http://web.archive.org/web/20100807021758/http://kquest.co.cc/2010/03/program-process-task-thread">Also</a>
-* <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx">微軟提供的</a></p>
+<p>這大概是問最多的基本題吧，就連 <a href="https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;tab=votes#tab-top">StackOverflow</a> 上面也是超多人在問的。</p>
+<ul>
+  <li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx">微軟提供的</a></li>
+  <li><a href="http://web.archive.org/web/20100807021758/http://kquest.co.cc/2010/03/program-process-task-thread">Others</a></li>
+</ul>
 
 <p>我覺得一開始可以這樣說：</p>
 
@@ -78,30 +80,53 @@
   <p>意即每個 Thread 處於相同的記憶體空間上，所以是分享記憶體的。</p>
 </blockquote>
 
+<hr />
+
 <p>用日常生活的方式舉個例子的話，比較像是高速公路的概念。</p>
 
 <p>國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。</p>
 
-<h2 id="section">筆記</h2>
+<h2 id="process-vs-thread-筆記">Process vs Thread 筆記</h2>
 
 <h3 id="apache">Apache</h3>
-<p>後來又看到 <a href="http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html">mode_wsgi的這篇</a>，裡面提到了Apache提供了三種不同的Mode
-||Multi-Process|Multi-Thread|
-|—–|:—–:|—–|
-|Prefork|Yes|No|
-|Worker|Yes|Yes|
-|Winnt|No|Yes|
-—-
-Worker 文件也提到了 <code class="highlighter-rouge">Python GIL</code> 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。</p>
+<p>後來又看到 <a href="http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html">mode_wsgi的這篇</a>，裡面提到了Apache提供了三種不同的Mode</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: center">Multi-Process</th>
+      <th>Multi-Thread</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prefork</td>
+      <td style="text-align: center">Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Worker</td>
+      <td style="text-align: center">Yes</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Winnt</td>
+      <td style="text-align: center">No</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+<p>Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。</p>
 
 <p>我也好奇 Worker 是如何產生 Process/Thread 的，其實概念也蠻簡單的，就是先把Process 內的 Thread 塞滿，滿了之後再開 Child Process 依此類推。</p>
 
 <h3 id="nginx">Nginx</h3>
 <p><a href="https://www.reddit.com/r/Python/comments/4s40ge/understanding_uwsgi_threads_processes_and_gil/">Nginx+uWSGI</a> 這篇看來，uWSGI則沒有處理 GIL 的問題，如果有碰到 I/O bound的問題，看來還是只能乖乖地關掉 thread 了(QQ)</p>
 
-<h1 id="copy-on-write">Copy On Write</h1>
-
-<h1 id="thread-safe">Thread-Safe</h1>
+<p>[Python GIL]https://wiki.python.org/moin/GlobalInterpreterLock</p>
 
 <h1 id="whats-the-different-between-http-methods-post-and-get">What’s the different between HTTP methods POST and GET?</h1>
 
@@ -189,6 +214,7 @@ Worker 文件也提到了 <code class="highlighter-rouge">Python GIL</code> 的�
   <li>The CSRF token is added as a hidden field for forms or within the URL if the state changing operation occurs via a GET</li>
   <li>The server rejects the requested action if the CSRF token fails validation</li>
 </ul>
+
 
   </div>
 

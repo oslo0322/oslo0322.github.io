@@ -59,7 +59,7 @@
   <div class="entry">
     <p>好久沒寫筆記了，趁這假日的空擋，來寫寫這次遭遇的事件</p>
 
-<h1 id="section">起因</h1>
+<h1 id="起因">起因</h1>
 
 <p>這次事件，其實是因為公司的 MongoDB 的硬碟空間減少速度比預想中來得快(就商業來說是件好事！)
 但對工程師來說就是個挑戰，因為出差回來，硬碟只剩下4％(估計剩下10天的容量)</p>
@@ -82,7 +82,7 @@
 
 <p>解決辦法: 是類似以前的 <code class="highlighter-rouge">磁碟重組</code>，就是將橘子全部倒出來重新裝箱，但這工程可想而知，一定很複雜，而且會很耗時。</p>
 
-<h4 id="section-1"><em>既然不能節流，那就開源吧</em></h4>
+<h4 id="既然不能節流那就開源吧"><em>既然不能節流，那就開源吧</em></h4>
 
 <p>其實有很多方法可以增加硬碟空間</p>
 
@@ -106,12 +106,12 @@
 
 <p>於是，這次就採用了 <code class="highlighter-rouge">2.</code> 的方法(也很感謝公司能給這個時間，讓我嘗試這種方法。)</p>
 
-<h1 id="section-2">本文開始</h1>
+<h1 id="本文開始">本文開始</h1>
 <p>既然要很帥氣的挑戰 <code class="highlighter-rouge">zero-downtime</code> ，事前功課必不能少。
 自從來了幾個很厲害的同事(*1)之後，學到了 工欲善其事，必先 google 的心法
 (時間再怎麼趕，都要做好最好及最壞打算的規劃)</p>
 
-<h3 id="section-3">現況</h3>
+<h3 id="現況">現況</h3>
 <ol>
   <li>我們 MongoDB 採用的是 <code class="highlighter-rouge">primary + 2 * slave</code> 的 <code class="highlighter-rouge">replica</code> 架構。</li>
   <li>每日台灣時間早上八點 (<code class="highlighter-rouge">UTC+0</code>) 會將資料用 <code class="highlighter-rouge">mongodump</code> 成 <code class="highlighter-rouge">bson</code> 檔案備份到 <code class="highlighter-rouge">AWS S3</code></li>
@@ -119,7 +119,7 @@
   <li>資料容量約 2T</li>
 </ol>
 
-<h3 id="section-4">欲改善問題</h3>
+<h3 id="欲改善問題">欲改善問題</h3>
 <ol>
   <li>原本 VPC 架構有問題，想換成用 <code class="highlighter-rouge">CloudFormation</code> 程式化的 <code class="highlighter-rouge">infrastructure</code></li>
   <li>原本是利用 <code class="highlighter-rouge">CIDR /32</code> IP binding 的方法來讓公司可以直連<code class="highlighter-rouge">(for debug)</code>，但這樣有時候沒設定好，導致連測試資料也一起上去</li>
@@ -150,7 +150,7 @@
 
 <p>所以我們要升級容量的時候順便將 SSD type 換成 gp2，<code class="highlighter-rouge">IOPS</code> 明顯提升，還更便宜。</p>
 
-<h3 id="section-5">執行前實驗</h3>
+<h3 id="執行前實驗">執行前實驗</h3>
 <p>其實我當初已經有將 <code class="highlighter-rouge">Infrastructure</code> 寫成 <code class="highlighter-rouge">CloudFormation</code> ，所以這段時間已經省下來了(之後也會開源這塊)，重點在 migrate data 這塊</p>
 
 <p>我們最初想到跟查到文件這裡都是建議使用 <code class="highlighter-rouge">mongodump + mongorestore</code> 來做 <code class="highlighter-rouge">migration</code>，但在我們公司會有個問題</p>
@@ -161,9 +161,9 @@
 
 <p>後來有想說利用 <code class="highlighter-rouge">mongooplog</code> 這塊，但這塊經實驗之後，發現會有很高的機會會把 <code class="highlighter-rouge">server shutdown</code>，所以並不採用</p>
 
-<h4 id="sync-">最後還是靠寫程式，來將 sync 這段做好</h4>
+<h4 id="最後還是靠寫程式來將-sync-這段做好">最後還是靠寫程式，來將 sync 這段做好</h4>
 
-<h3 id="section-6">執行</h3>
+<h3 id="執行">執行</h3>
 <ol>
   <li>CloudFormation one click open(需要注意 AWS soft limit: EIP, EBS capacity 等限制)</li>
   <li>migration(<code class="highlighter-rouge">mongodump</code>+<code class="highlighter-rouge">mongorestore</code>+<code class="highlighter-rouge">self sync script</code>)</li>

@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.1.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2017-12-20T10:30:32+08:00</updated><id>/</id><title>Oslo</title><subtitle>Backend Developer</subtitle><entry><title>Interview Questions for Backend developer.</title><link href="/interview-questions/" rel="alternate" type="text/html" title="Interview Questions for Backend developer." /><published>2017-12-19T00:00:00+08:00</published><updated>2017-12-19T00:00:00+08:00</updated><id>/interview-questions</id><content type="html" xml:base="/interview-questions/">&lt;p&gt;最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-12-21T08:49:00+08:00</updated><id>http://localhost:4000/</id><title type="html">oslo0322.github.io</title><subtitle>Backend Developer</subtitle><entry><title type="html">Interview Questions for Backend developer.</title><link href="http://localhost:4000/interview-questions/" rel="alternate" type="text/html" title="Interview Questions for Backend developer." /><published>2017-12-19T00:00:00+08:00</published><updated>2017-12-19T00:00:00+08:00</updated><id>http://localhost:4000/interview-questions</id><content type="html" xml:base="http://localhost:4000/interview-questions/">&lt;p&gt;最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。&lt;/p&gt;
 
 &lt;h1 id=&quot;process-vs-thread&quot;&gt;Process vs Thread&lt;/h1&gt;
-&lt;p&gt;這大概是問最多的基本題吧，就連 &lt;a href=&quot;https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;amp;tab=votes#tab-top&quot;&gt;StackOverflow&lt;/a&gt; 上面也是超多人在問的。
-* &lt;a href=&quot;http://web.archive.org/web/20100807021758/http://kquest.co.cc/2010/03/program-process-task-thread&quot;&gt;Also&lt;/a&gt;
-* &lt;a href=&quot;https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx&quot;&gt;微軟提供的&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;這大概是問最多的基本題吧，就連 &lt;a href=&quot;https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;amp;tab=votes#tab-top&quot;&gt;StackOverflow&lt;/a&gt; 上面也是超多人在問的。&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx&quot;&gt;微軟提供的&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://web.archive.org/web/20100807021758/http://kquest.co.cc/2010/03/program-process-task-thread&quot;&gt;Others&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;我覺得一開始可以這樣說：&lt;/p&gt;
 
@@ -19,30 +21,53 @@
   &lt;p&gt;意即每個 Thread 處於相同的記憶體空間上，所以是分享記憶體的。&lt;/p&gt;
 &lt;/blockquote&gt;
 
+&lt;hr /&gt;
+
 &lt;p&gt;用日常生活的方式舉個例子的話，比較像是高速公路的概念。&lt;/p&gt;
 
 &lt;p&gt;國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;筆記&lt;/h2&gt;
+&lt;h2 id=&quot;process-vs-thread-筆記&quot;&gt;Process vs Thread 筆記&lt;/h2&gt;
 
 &lt;h3 id=&quot;apache&quot;&gt;Apache&lt;/h3&gt;
-&lt;p&gt;後來又看到 &lt;a href=&quot;http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html&quot;&gt;mode_wsgi的這篇&lt;/a&gt;，裡面提到了Apache提供了三種不同的Mode
-||Multi-Process|Multi-Thread|
-|—–|:—–:|—–|
-|Prefork|Yes|No|
-|Worker|Yes|Yes|
-|Winnt|No|Yes|
-—-
-Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python GIL&lt;/code&gt; 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。&lt;/p&gt;
+&lt;p&gt;後來又看到 &lt;a href=&quot;http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html&quot;&gt;mode_wsgi的這篇&lt;/a&gt;，裡面提到了Apache提供了三種不同的Mode&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Multi-Process&lt;/th&gt;
+      &lt;th&gt;Multi-Thread&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Prefork&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;/td&gt;
+      &lt;td&gt;No&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Worker&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Yes&lt;/td&gt;
+      &lt;td&gt;Yes&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Winnt&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;No&lt;/td&gt;
+      &lt;td&gt;Yes&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。&lt;/p&gt;
 
 &lt;p&gt;我也好奇 Worker 是如何產生 Process/Thread 的，其實概念也蠻簡單的，就是先把Process 內的 Thread 塞滿，滿了之後再開 Child Process 依此類推。&lt;/p&gt;
 
 &lt;h3 id=&quot;nginx&quot;&gt;Nginx&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/Python/comments/4s40ge/understanding_uwsgi_threads_processes_and_gil/&quot;&gt;Nginx+uWSGI&lt;/a&gt; 這篇看來，uWSGI則沒有處理 GIL 的問題，如果有碰到 I/O bound的問題，看來還是只能乖乖地關掉 thread 了(QQ)&lt;/p&gt;
 
-&lt;h1 id=&quot;copy-on-write&quot;&gt;Copy On Write&lt;/h1&gt;
-
-&lt;h1 id=&quot;thread-safe&quot;&gt;Thread-Safe&lt;/h1&gt;
+&lt;p&gt;[Python GIL]https://wiki.python.org/moin/GlobalInterpreterLock&lt;/p&gt;
 
 &lt;h1 id=&quot;whats-the-different-between-http-methods-post-and-get&quot;&gt;What’s the different between HTTP methods POST and GET?&lt;/h1&gt;
 
@@ -129,9 +154,9 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
   &lt;li&gt;Generated by a cryptographically secure random number generator&lt;/li&gt;
   &lt;li&gt;The CSRF token is added as a hidden field for forms or within the URL if the state changing operation occurs via a GET&lt;/li&gt;
   &lt;li&gt;The server rejects the requested action if the CSRF token fails validation&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>oslo0322</name></author><summary>最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。</summary></entry><entry><title>Using another decorator inherit the decorator in python.</title><link href="/override-decorator/" rel="alternate" type="text/html" title="Using another decorator inherit the decorator in python." /><published>2017-12-03T00:00:00+08:00</published><updated>2017-12-03T00:00:00+08:00</updated><id>/override-decorator</id><content type="html" xml:base="/override-decorator/">&lt;p&gt;最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>oslo0322</name></author><summary type="html">最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。</summary></entry><entry><title type="html">Using another decorator inherit the decorator in python.</title><link href="http://localhost:4000/override-decorator/" rel="alternate" type="text/html" title="Using another decorator inherit the decorator in python." /><published>2017-12-03T00:00:00+08:00</published><updated>2017-12-03T00:00:00+08:00</updated><id>http://localhost:4000/override-decorator</id><content type="html" xml:base="http://localhost:4000/override-decorator/">&lt;p&gt;最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。&lt;/p&gt;
 
-&lt;h1 id=&quot;section&quot;&gt;起因&lt;/h1&gt;
+&lt;h1 id=&quot;起因&quot;&gt;起因&lt;/h1&gt;
 
 &lt;p&gt;最近在寫的 &lt;code class=&quot;highlighter-rouge&quot;&gt;Unit test&lt;/code&gt; 需要 Freeze time，例如我想要每次在 &lt;code class=&quot;highlighter-rouge&quot;&gt;datetime.now()&lt;/code&gt; 的時候都是回傳一樣的時間。&lt;/p&gt;
 
@@ -145,7 +170,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;查看了一下MySQL lib原始碼內實作時間轉換的程式&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MySQLConverter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MySQLConverterBase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MySQLConverter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MySQLConverterBase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;省略&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;to_mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Convert Python data type to MySQL&quot;&quot;&quot;&lt;/span&gt;
@@ -153,7 +178,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
         &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;getattr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;_{0}_to_mysql&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;AttributeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TypeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Python &#39;{0}&#39; cannot be converted to a &quot;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TypeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Python '{0}' cannot be converted to a &quot;&lt;/span&gt;
                             &lt;span class=&quot;s&quot;&gt;&quot;MySQL type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;省略&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_datetime_to_mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -161,49 +186,47 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
         Converts a datetime instance to a string suitable for MySQL.
         The returned string has format: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Y-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;m-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;H:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;M:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;S[.&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f]
 
-        If the instance isn&#39;t a datetime.datetime type, it return None.
+        If the instance isn't a datetime.datetime type, it return None.
 
         Returns a bytes.
         &quot;&quot;&quot;&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;microsecond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;{0:d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}&#39;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'{0:d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}.{6:06d}'&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
                 &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;year&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                 &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hour&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;microsecond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;ascii&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;microsecond&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ascii'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-        &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;{0:d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}&#39;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'{0:d}-{1:02d}-{2:02d} {3:02d}:{4:02d}:{5:02d}'&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;year&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hour&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;ascii&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hour&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ascii'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_date_to_mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
         Converts a date instance to a string suitable for MySQL.
         The returned string has format: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Y-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;m-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d
 
-        If the instance isn&#39;t a datetime.date type, it return None.
+        If the instance isn't a datetime.date type, it return None.
 
         Returns a bytes.
         &quot;&quot;&quot;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;{0:d}-{1:02d}-{2:02d}&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;year&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                                              &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;ascii&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'{0:d}-{1:02d}-{2:02d}'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;year&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;month&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                              &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'ascii'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;發現轉換的實作方式是把 object 的 class name 轉成相對應的 method&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;getattr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;_{0}_to_mysql&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;而當我們使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;Freezegun&lt;/code&gt; 的時候，他會重新把 datetime 的 object 變成 FakeDate/FakeDatetime，所以 class name 會跟相對應的 method 會對不起來(沒有 _fakedate_to_mysql 這個method)，因為此時 class name 變成了 FakeDate/FakeDatetime。&lt;/p&gt;
 
 &lt;p&gt;所以就會造成錯誤了。&lt;/p&gt;
 
-&lt;h1 id=&quot;section-1&quot;&gt;解法&lt;/h1&gt;
+&lt;h1 id=&quot;解法&quot;&gt;解法&lt;/h1&gt;
 
 &lt;p&gt;其實知道原因之後解法還蠻簡單的。&lt;/p&gt;
 
@@ -220,15 +243,14 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;所以程式改起來會像是&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyTestCases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unittest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyTestCases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unittest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
 
     &lt;span class=&quot;nd&quot;&gt;@freeze_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2017-12-03&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_case_1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;datetime&quot;&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;date&quot;&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;do_test_here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;但是這樣還有一個問題，就是你每個會查詢 MySQL 的 test case 都要加上這兩行，實在有夠麻煩。&lt;/p&gt;
 
@@ -236,10 +258,10 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;實作出來會像是下面這樣&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hijack_freeze_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hijack_args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hijack_kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hijack_freeze_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hijack_args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hijack_kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-    Fixed MySQL Lib type converter&#39;s issue
-    TypeError: Python &#39;fakedate&#39; cannot be converted to a MySQL type
+    Fixed MySQL Lib type converter's issue
+    TypeError: Python 'fakedate' cannot be converted to a MySQL type
     &quot;&quot;&quot;&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;outer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;nd&quot;&gt;@freeze_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hijack_args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hijack_kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -249,22 +271,20 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
             &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outer&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;實際用起來就會像是&lt;/p&gt;
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyTestCases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unittest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyTestCases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unittest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
 
     &lt;span class=&quot;nd&quot;&gt;@hijack_freeze_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2017-12-03&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_case_1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;do_test_here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;跟原本方式一樣，簡單多了(名字變了，更甚者，可以連名字都一樣，改 import 路徑就好)。&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。</summary></entry><entry><title>介紹 AWS 雲端架構</title><link href="/vpc-introduce/" rel="alternate" type="text/html" title="介紹 AWS 雲端架構" /><published>2017-01-08T00:00:00+08:00</published><updated>2017-01-08T00:00:00+08:00</updated><id>/vpc-introduce</id><content type="html" xml:base="/vpc-introduce/">&lt;h3 id=&quot;section&quot;&gt;在開始介紹之前，先來談談一般常見的公司架構吧&lt;/h3&gt;
+&lt;p&gt;跟原本方式一樣，簡單多了(名字變了，更甚者，可以連名字都一樣，改 import 路徑就好)。&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。</summary></entry><entry><title type="html">介紹 AWS 雲端架構</title><link href="http://localhost:4000/vpc-introduce/" rel="alternate" type="text/html" title="介紹 AWS 雲端架構" /><published>2017-01-08T00:00:00+08:00</published><updated>2017-01-08T00:00:00+08:00</updated><id>http://localhost:4000/vpc-introduce</id><content type="html" xml:base="http://localhost:4000/vpc-introduce/">&lt;h3 id=&quot;在開始介紹之前先來談談一般常見的公司架構吧&quot;&gt;在開始介紹之前，先來談談一般常見的公司架構吧&lt;/h3&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;架構&lt;/h3&gt;
+&lt;h3 id=&quot;架構&quot;&gt;架構&lt;/h3&gt;
 &lt;p&gt;首先，一個中大型公司以上的公司，因為不同的專業，所以會有 &lt;em&gt;&lt;strong&gt;部門&lt;/strong&gt;&lt;/em&gt; 的存在，在部門之中。 
 在部門之中，通常也會分成 &lt;em&gt;&lt;strong&gt;對外&lt;/strong&gt;&lt;/em&gt; 以及 &lt;em&gt;&lt;strong&gt;內部&lt;/strong&gt;&lt;/em&gt; 
 舉個例子來說，對外就比較像是窗口，像是客服、業務…等，內部則是行政、工程…等單位。&lt;/p&gt;
@@ -277,7 +297,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
   &lt;li&gt;內部的類型通常則為 &lt;code class=&quot;highlighter-rouge&quot;&gt;資料庫伺服器(DataBase Server)&lt;/code&gt;，這些通常是商業機密，通常會有權限，不能讓一般使用者存取的服務&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;溝通&lt;/h3&gt;
+&lt;h3 id=&quot;溝通&quot;&gt;溝通&lt;/h3&gt;
 &lt;p&gt;一般公司都會有總機，總機上有一張 &lt;em&gt;&lt;strong&gt;總表&lt;/strong&gt;&lt;/em&gt;，怎麼打是打 &lt;em&gt;&lt;strong&gt;內線電話&lt;/strong&gt;&lt;/em&gt;、&lt;em&gt;&lt;strong&gt;對外電話&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;當我們伺服器後，伺服器之間要怎麼互相溝通，也是跟部門之間溝通很像，
@@ -295,16 +315,16 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h1 id=&quot;section-3&quot;&gt;公司有了，要開始服務了&lt;/h1&gt;
+&lt;h1 id=&quot;公司有了要開始服務了&quot;&gt;公司有了，要開始服務了&lt;/h1&gt;
 
 &lt;p&gt;假設現有個民眾要來申辦某個業務，通常一開始會先到 &lt;em&gt;&lt;strong&gt;某個業務窗口&lt;/strong&gt;&lt;/em&gt;，開始說要申辦怎樣的業務、自己是誰等等的。
 今天假設只有你一人，可能窗口只有一個人替你申辦，但萬一後面很多在排隊，通常就有另外一位員工開另一條線，替後面的人申辦&lt;/p&gt;
 
 &lt;p&gt;伺服器也是一樣的道理，有種伺服器叫做 &lt;code class=&quot;highlighter-rouge&quot;&gt;負載均衡器 (Load Balancer)&lt;/code&gt;，
 他會自動分配每個 &lt;code class=&quot;highlighter-rouge&quot;&gt;請求(request)&lt;/code&gt; 到不同的伺服器上，
-伺服器通常是可以同時服務很多人的，但一台伺服器撐不住了，我們就會再開一台一樣的 &lt;code class=&quot;highlighter-rouge&quot;&gt;自動擴展(Auto Scaleing)&lt;/code&gt;，藉此服務更多的人。&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>在開始介紹之前，先來談談一般常見的公司架構吧</summary></entry><entry><title>Zero downtime migrate mongodb to a larger disk space</title><link href="/mongodb-migrated-note/" rel="alternate" type="text/html" title="Zero downtime migrate mongodb to a larger disk space" /><published>2016-12-25T00:00:00+08:00</published><updated>2016-12-25T00:00:00+08:00</updated><id>/mongodb-migrated-note</id><content type="html" xml:base="/mongodb-migrated-note/">&lt;p&gt;好久沒寫筆記了，趁這假日的空擋，來寫寫這次遭遇的事件&lt;/p&gt;
+伺服器通常是可以同時服務很多人的，但一台伺服器撐不住了，我們就會再開一台一樣的 &lt;code class=&quot;highlighter-rouge&quot;&gt;自動擴展(Auto Scaleing)&lt;/code&gt;，藉此服務更多的人。&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">在開始介紹之前，先來談談一般常見的公司架構吧</summary></entry><entry><title type="html">Zero downtime migrate mongodb to a larger disk space</title><link href="http://localhost:4000/mongodb-migrated-note/" rel="alternate" type="text/html" title="Zero downtime migrate mongodb to a larger disk space" /><published>2016-12-25T00:00:00+08:00</published><updated>2016-12-25T00:00:00+08:00</updated><id>http://localhost:4000/mongodb-migrated-note</id><content type="html" xml:base="http://localhost:4000/mongodb-migrated-note/">&lt;p&gt;好久沒寫筆記了，趁這假日的空擋，來寫寫這次遭遇的事件&lt;/p&gt;
 
-&lt;h1 id=&quot;section&quot;&gt;起因&lt;/h1&gt;
+&lt;h1 id=&quot;起因&quot;&gt;起因&lt;/h1&gt;
 
 &lt;p&gt;這次事件，其實是因為公司的 MongoDB 的硬碟空間減少速度比預想中來得快(就商業來說是件好事！)
 但對工程師來說就是個挑戰，因為出差回來，硬碟只剩下4％(估計剩下10天的容量)&lt;/p&gt;
@@ -327,7 +347,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;解決辦法: 是類似以前的 &lt;code class=&quot;highlighter-rouge&quot;&gt;磁碟重組&lt;/code&gt;，就是將橘子全部倒出來重新裝箱，但這工程可想而知，一定很複雜，而且會很耗時。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-1&quot;&gt;&lt;em&gt;既然不能節流，那就開源吧&lt;/em&gt;&lt;/h4&gt;
+&lt;h4 id=&quot;既然不能節流那就開源吧&quot;&gt;&lt;em&gt;既然不能節流，那就開源吧&lt;/em&gt;&lt;/h4&gt;
 
 &lt;p&gt;其實有很多方法可以增加硬碟空間&lt;/p&gt;
 
@@ -351,12 +371,12 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;於是，這次就採用了 &lt;code class=&quot;highlighter-rouge&quot;&gt;2.&lt;/code&gt; 的方法(也很感謝公司能給這個時間，讓我嘗試這種方法。)&lt;/p&gt;
 
-&lt;h1 id=&quot;section-2&quot;&gt;本文開始&lt;/h1&gt;
+&lt;h1 id=&quot;本文開始&quot;&gt;本文開始&lt;/h1&gt;
 &lt;p&gt;既然要很帥氣的挑戰 &lt;code class=&quot;highlighter-rouge&quot;&gt;zero-downtime&lt;/code&gt; ，事前功課必不能少。
 自從來了幾個很厲害的同事(*1)之後，學到了 工欲善其事，必先 google 的心法
 (時間再怎麼趕，都要做好最好及最壞打算的規劃)&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;現況&lt;/h3&gt;
+&lt;h3 id=&quot;現況&quot;&gt;現況&lt;/h3&gt;
 &lt;ol&gt;
   &lt;li&gt;我們 MongoDB 採用的是 &lt;code class=&quot;highlighter-rouge&quot;&gt;primary + 2 * slave&lt;/code&gt; 的 &lt;code class=&quot;highlighter-rouge&quot;&gt;replica&lt;/code&gt; 架構。&lt;/li&gt;
   &lt;li&gt;每日台灣時間早上八點 (&lt;code class=&quot;highlighter-rouge&quot;&gt;UTC+0&lt;/code&gt;) 會將資料用 &lt;code class=&quot;highlighter-rouge&quot;&gt;mongodump&lt;/code&gt; 成 &lt;code class=&quot;highlighter-rouge&quot;&gt;bson&lt;/code&gt; 檔案備份到 &lt;code class=&quot;highlighter-rouge&quot;&gt;AWS S3&lt;/code&gt;&lt;/li&gt;
@@ -364,7 +384,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
   &lt;li&gt;資料容量約 2T&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&quot;section-4&quot;&gt;欲改善問題&lt;/h3&gt;
+&lt;h3 id=&quot;欲改善問題&quot;&gt;欲改善問題&lt;/h3&gt;
 &lt;ol&gt;
   &lt;li&gt;原本 VPC 架構有問題，想換成用 &lt;code class=&quot;highlighter-rouge&quot;&gt;CloudFormation&lt;/code&gt; 程式化的 &lt;code class=&quot;highlighter-rouge&quot;&gt;infrastructure&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;原本是利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;CIDR /32&lt;/code&gt; IP binding 的方法來讓公司可以直連&lt;code class=&quot;highlighter-rouge&quot;&gt;(for debug)&lt;/code&gt;，但這樣有時候沒設定好，導致連測試資料也一起上去&lt;/li&gt;
@@ -395,7 +415,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;所以我們要升級容量的時候順便將 SSD type 換成 gp2，&lt;code class=&quot;highlighter-rouge&quot;&gt;IOPS&lt;/code&gt; 明顯提升，還更便宜。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-5&quot;&gt;執行前實驗&lt;/h3&gt;
+&lt;h3 id=&quot;執行前實驗&quot;&gt;執行前實驗&lt;/h3&gt;
 &lt;p&gt;其實我當初已經有將 &lt;code class=&quot;highlighter-rouge&quot;&gt;Infrastructure&lt;/code&gt; 寫成 &lt;code class=&quot;highlighter-rouge&quot;&gt;CloudFormation&lt;/code&gt; ，所以這段時間已經省下來了(之後也會開源這塊)，重點在 migrate data 這塊&lt;/p&gt;
 
 &lt;p&gt;我們最初想到跟查到文件這裡都是建議使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;mongodump + mongorestore&lt;/code&gt; 來做 &lt;code class=&quot;highlighter-rouge&quot;&gt;migration&lt;/code&gt;，但在我們公司會有個問題&lt;/p&gt;
@@ -406,9 +426,9 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;後來有想說利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;mongooplog&lt;/code&gt; 這塊，但這塊經實驗之後，發現會有很高的機會會把 &lt;code class=&quot;highlighter-rouge&quot;&gt;server shutdown&lt;/code&gt;，所以並不採用&lt;/p&gt;
 
-&lt;h4 id=&quot;sync-&quot;&gt;最後還是靠寫程式，來將 sync 這段做好&lt;/h4&gt;
+&lt;h4 id=&quot;最後還是靠寫程式來將-sync-這段做好&quot;&gt;最後還是靠寫程式，來將 sync 這段做好&lt;/h4&gt;
 
-&lt;h3 id=&quot;section-6&quot;&gt;執行&lt;/h3&gt;
+&lt;h3 id=&quot;執行&quot;&gt;執行&lt;/h3&gt;
 &lt;ol&gt;
   &lt;li&gt;CloudFormation one click open(需要注意 AWS soft limit: EIP, EBS capacity 等限制)&lt;/li&gt;
   &lt;li&gt;migration(&lt;code class=&quot;highlighter-rouge&quot;&gt;mongodump&lt;/code&gt;+&lt;code class=&quot;highlighter-rouge&quot;&gt;mongorestore&lt;/code&gt;+&lt;code class=&quot;highlighter-rouge&quot;&gt;self sync script&lt;/code&gt;)&lt;/li&gt;
@@ -419,7 +439,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;很感謝公司的各位同事，在這段時間的 cover ，雖然最後結果上還是發現有一些小小的問題，但以 &lt;code class=&quot;highlighter-rouge&quot;&gt;zero-downtime&lt;/code&gt; 的挑戰來說，卻是成功的！&lt;/p&gt;
 
-&lt;p&gt;*1: 高手等級人物 &lt;a href=&quot;https://github.com/johnlinvc&quot;&gt;John&lt;/a&gt;、&lt;a href=&quot;https://github.com/sodastsai&quot;&gt;Sodas&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>好久沒寫筆記了，趁這假日的空擋，來寫寫這次遭遇的事件</summary></entry><entry><title>數值分析名詞紀錄</title><link href="/useful-command-or-function/" rel="alternate" type="text/html" title="數值分析名詞紀錄" /><published>2016-07-04T00:00:00+08:00</published><updated>2016-07-04T00:00:00+08:00</updated><id>/useful-command-or-function</id><content type="html" xml:base="/useful-command-or-function/">&lt;h1 id=&quot;story&quot;&gt;Story&lt;/h1&gt;
+&lt;p&gt;*1: 高手等級人物 &lt;a href=&quot;https://github.com/johnlinvc&quot;&gt;John&lt;/a&gt;、&lt;a href=&quot;https://github.com/sodastsai&quot;&gt;Sodas&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">好久沒寫筆記了，趁這假日的空擋，來寫寫這次遭遇的事件</summary></entry><entry><title type="html">數值分析名詞紀錄</title><link href="http://localhost:4000/useful-command-or-function/" rel="alternate" type="text/html" title="數值分析名詞紀錄" /><published>2016-07-04T00:00:00+08:00</published><updated>2016-07-04T00:00:00+08:00</updated><id>http://localhost:4000/useful-command-or-function</id><content type="html" xml:base="http://localhost:4000/useful-command-or-function/">&lt;h1 id=&quot;story&quot;&gt;Story&lt;/h1&gt;
 &lt;p&gt;最近發現，之前有些 google 過的東西，但是要再拿出來用的時候，突然忘記當初的關鍵字是下什麼了，又很緊急的要用，所以這次決定要把它記下來
 (畢竟母語不是英文，常常會想不到對應的單字或者關鍵字)&lt;/p&gt;
 
@@ -432,15 +452,14 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
 
 &lt;p&gt;這點在 Numpy 上會很好作業，也只要一行就可以達成了&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def consecutive(data, step_size=1):
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def consecutive(data, step_size=1):
     &quot;&quot;&quot;
     :param data:
     :param int step_size: split size
     :rtype: np.array
     &quot;&quot;&quot;
     return np.array(np.split(np.array(data), np.where(np.diff(data) != step_size)[0] + 1))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;blockquote&gt;
   &lt;ul&gt;
@@ -463,7 +482,7 @@ Worker 文件也提到了 &lt;code class=&quot;highlighter-rouge&quot;&gt;Python
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3, 4, 5]&lt;/code&gt; 的 array 想要變成 &lt;code class=&quot;highlighter-rouge&quot;&gt;[[1, 2], [2, 3], [3, 4], [4, 5]]&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##  特別注意：如果陣列小於 window 會出現問題。
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##  特別注意：如果陣列小於 window 會出現問題。
 def rolling_window(data_series, window):
     &quot;&quot;&quot;
     :param np.array data_series:
@@ -473,22 +492,20 @@ def rolling_window(data_series, window):
     shape = data_series.shape[:-1] + (data_series.shape[-1] - window + 1, window)
     strides = data_series.strides + (data_series.strides[-1],)
     return np.lib.stride_tricks.as_strided(data_series, shape=shape, strides=strides)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;shape&lt;/code&gt; 代表 array 的 (i, j)，此段主要是表示我切好後，array 應該是要長什麼模樣&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;strides&lt;/code&gt; 代表字符的 byte 的組數&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1, 3, 5, 7])
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1, 3, 5, 7])
 &amp;gt;&amp;gt;&amp;gt; a.strides
 (8, )
 &amp;gt;&amp;gt;&amp;gt; b = np.array([1, 3, 5, 7], [2, 2, 3, 4])
 &amp;gt;&amp;gt;&amp;gt; b.strides
 (32, 8)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;記憶體儲存這組 a array 是 8 byte(int64, 4 byte -&amp;gt; int32), 當變成二維陣列的時候，記憶體要跳過 32個(8*4) byte來到達鄰近的下一個區塊&lt;/p&gt;
@@ -498,19 +515,17 @@ def rolling_window(data_series, window):
 
 &lt;p&gt;each array have 3 elements&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1D array shape (3,) strides (8, )
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1D array shape (3,) strides (8, )
 2D array shape (2, 3) strides (24, 8)
 3D array shape (4, 2, 3) strides (48, 24, 8)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;公式&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1D array 8
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1D array 8
 2D array 8 * 3 shape(x, 3) = (24, 8)
 3D array 8 * 3 * 2 shape(y, 2, 3) = (48, 24, 8)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;想成數學式子算是我的另一種見解吧XD&lt;/p&gt;
 
@@ -520,11 +535,10 @@ def rolling_window(data_series, window):
 
 &lt;p&gt;rolling_window我們預期想要的結果是將結果多一個維度，以一維陣列來說&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1,2,3,4])
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1,2,3,4])
 &amp;gt;&amp;gt;&amp;gt; rolling_window(a, 2)  #  兩個元素為一組來切
 [[1,2], [2,3], [3,4]]   #  預期結果
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;所以&lt;/p&gt;
 
@@ -537,12 +551,11 @@ def rolling_window(data_series, window):
 
 &lt;p&gt;是因為原本只有 4 個數值，最後要變成 6 個數值，如果是 (16, 8) 組的話會變成&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Out[66]:
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Out[66]:
 array([[         1,          2],
        [         3,          4],
        [4459105896, 4459105896]])
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;就會變成 &lt;code class=&quot;highlighter-rouge&quot;&gt;(8, )&lt;/code&gt; 組，會變成 reshape 直接對半切開，少的用 int64 最大值補上&lt;/p&gt;
 
@@ -553,9 +566,7 @@ array([[         1,          2],
 &lt;/blockquote&gt;
 
 &lt;p&gt;Reference:
- &lt;a href=&quot;http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.strides.html&quot;&gt;numpy.ndarray.strides&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>Story
-最近發現，之前有些 google 過的東西，但是要再拿出來用的時候，突然忘記當初的關鍵字是下什麼了，又很緊急的要用，所以這次決定要把它記下來
-(畢竟母語不是英文，常常會想不到對應的單字或者關鍵字)</summary></entry><entry><title>AWS 的 ELB 與 Nginx 的愛恨糾葛</title><link href="/aws-elb-nginx/" rel="alternate" type="text/html" title="AWS 的 ELB 與 Nginx 的愛恨糾葛" /><published>2016-06-12T00:00:00+08:00</published><updated>2016-06-12T00:00:00+08:00</updated><id>/aws-elb-nginx</id><content type="html" xml:base="/aws-elb-nginx/">&lt;h3 id=&quot;aws-elb--nginx&quot;&gt;當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…&lt;/h3&gt;
+ &lt;a href=&quot;http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.strides.html&quot;&gt;numpy.ndarray.strides&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">Story 最近發現，之前有些 google 過的東西，但是要再拿出來用的時候，突然忘記當初的關鍵字是下什麼了，又很緊急的要用，所以這次決定要把它記下來 (畢竟母語不是英文，常常會想不到對應的單字或者關鍵字)</summary></entry><entry><title type="html">AWS 的 ELB 與 Nginx 的愛恨糾葛</title><link href="http://localhost:4000/aws-elb-nginx/" rel="alternate" type="text/html" title="AWS 的 ELB 與 Nginx 的愛恨糾葛" /><published>2016-06-12T00:00:00+08:00</published><updated>2016-06-12T00:00:00+08:00</updated><id>http://localhost:4000/aws-elb-nginx</id><content type="html" xml:base="http://localhost:4000/aws-elb-nginx/">&lt;h3 id=&quot;當aws-elb-碰到-nginx剛開始總是那麼地美好但時間久了總是會有些不是盡善盡美的地方&quot;&gt;當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…&lt;/h3&gt;
 
 &lt;ul&gt;
   &lt;li&gt;ELB
@@ -587,31 +598,29 @@ array([[         1,          2],
 
 &lt;p&gt;解法其實蠻簡單的，將轉向的網址設成變數，這樣每次 Nginx(木訥男) 的 &lt;a href=&quot;http://serverfault.com/questions/240476/how-to-force-nginx-to-resolve-dns-of-a-dynamic-hostname-everytime-when-doing-p&quot;&gt;Cache 只會儲存 5 分鐘&lt;/a&gt;(變成記憶力好比金魚的健忘男(誤..)&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resolver 10.0.0.0+2/16 # 可以參考 AWS DNS (註2);
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resolver 10.0.0.0+2/16 # 可以參考 AWS DNS (註2);
 set $upstream_endpoint http://xxxx.elb.amazonaws.com;
 location / {
     proxy_pass $upstream_endpoint;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Nginx pass_roxy 裡面有提到&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;A server name, its port and the passed URI can also be specified using variables:
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;A server name, its port and the passed URI can also be specified using variables:
 
 proxy_pass http://$host$uri;
 or even like this:
 
 proxy_pass $request;
 In this case, the server name is searched among the described server groups, and, if not found, is determined using a resolver.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;註1. &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9F&quot;&gt;Domain Name System&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;註2. &lt;a href=&quot;http://docs.aws.amazon.com/zh_cn/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html#AmazonDNS&quot;&gt;AWS DNS&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;參考 http://tenzer.dk/nginx-with-dynamic-upstreams/&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…</summary></entry><entry><title>在 AWS Lambda python 執行帶有 C module 的 libs</title><link href="/aws-lambda-with-c-module/" rel="alternate" type="text/html" title="在 AWS Lambda python 執行帶有 C module 的 libs" /><published>2016-06-11T00:00:00+08:00</published><updated>2016-06-11T00:00:00+08:00</updated><id>/aws-lambda-with-c-module</id><content type="html" xml:base="/aws-lambda-with-c-module/">&lt;p&gt;AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。&lt;/p&gt;
+&lt;p&gt;參考 http://tenzer.dk/nginx-with-dynamic-upstreams/&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">當AWS ELB 碰到 Nginx，剛開始總是那麼地美好，但時間久了，總是會有些不是盡善盡美的地方…</summary></entry><entry><title type="html">在 AWS Lambda python 執行帶有 C module 的 libs</title><link href="http://localhost:4000/aws-lambda-with-c-module/" rel="alternate" type="text/html" title="在 AWS Lambda python 執行帶有 C module 的 libs" /><published>2016-06-11T00:00:00+08:00</published><updated>2016-06-11T00:00:00+08:00</updated><id>http://localhost:4000/aws-lambda-with-c-module</id><content type="html" xml:base="http://localhost:4000/aws-lambda-with-c-module/">&lt;p&gt;AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。&lt;/p&gt;
 
 &lt;p&gt;如果你是用 Mac OSX 系統開發的話，在一般情形下，只要照 &lt;a href=&quot;http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html&quot;&gt;AWS 官方文件&lt;/a&gt;上建議的方法，包成zip，就可以執行了，但要用含有 C module 的 libs，像是 Matplotlib, Pandas, Numpy, Scipy 等等的，就會遇到意想不到的事情。&lt;/p&gt;
 
@@ -621,7 +630,7 @@ In this case, the server name is searched among the described server groups, and
   &lt;p&gt;Tips：&lt;/p&gt;
 
   &lt;p&gt;如果想要 packaging/update 主要的程式的話，可以將上述包好的檔案(zip)檔案，下載回來再自行刪除，更新或者增加上去&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary>AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</summary></entry><entry><title>Bash Script 的一些簡單範例 Part 1</title><link href="/bash-script-simple-example/" rel="alternate" type="text/html" title="Bash Script 的一些簡單範例 Part 1" /><published>2016-06-07T00:00:00+08:00</published><updated>2016-06-07T00:00:00+08:00</updated><id>/bash-script-simple-example</id><content type="html" xml:base="/bash-script-simple-example/">&lt;h2 id=&quot;bash-script--unix--function&quot;&gt;Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function&lt;/h2&gt;
+&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary type="html">AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</summary></entry><entry><title type="html">Bash Script 的一些簡單範例 Part 1</title><link href="http://localhost:4000/bash-script-simple-example/" rel="alternate" type="text/html" title="Bash Script 的一些簡單範例 Part 1" /><published>2016-06-07T00:00:00+08:00</published><updated>2016-06-07T00:00:00+08:00</updated><id>http://localhost:4000/bash-script-simple-example</id><content type="html" xml:base="http://localhost:4000/bash-script-simple-example/">&lt;h2 id=&quot;bash-script-是-unix-系統內最好也最實用的內建語言常常有些意想不到的-function&quot;&gt;Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function&lt;/h2&gt;
 
 &lt;h3 id=&quot;outline&quot;&gt;Outline&lt;/h3&gt;
 &lt;ul&gt;
@@ -633,7 +642,7 @@ In this case, the server name is searched among the described server groups, and
 &lt;h4 id=&quot;grep--awk&quot;&gt;grep + awk&lt;/h4&gt;
 &lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
 -rw-r--r--   1 oslo  staff     1 Jun  7 23:44 CNAME
 -rw-r--r--   1 oslo  staff  1077 Jun  7 23:44 LICENSE
 -rw-r--r--   1 oslo  staff  7939 Jun  7 23:44 README.md
@@ -643,32 +652,29 @@ drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
 drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
 drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
 drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;如果說我想要找某些字串，例如 &lt;code class=&quot;highlighter-rouge&quot;&gt;drwxr-xr-x&lt;/code&gt;，可以利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al | grep &quot;drwxr&quot;&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _includes
 drwxr-xr-x   5 oslo  staff   170 Jun  7 23:44 _layouts
 drwxr-xr-x   6 oslo  staff   204 Jun  8 00:10 _posts
 drwxr-xr-x   6 oslo  staff   204 Jun  7 23:44 _sass
 drwxr-xr-x  14 oslo  staff   476 Jun  8 00:10 _site
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;若我這時候還想要，某幾欄顯示的東西，例如第三欄這個 file 的 owner，就可以利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;awk&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al | grep &quot;drwxr&quot; | awk &#39;{print $2}&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al | grep &quot;drwxr&quot; | awk '{print $2}'&lt;/code&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oslo
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;oslo
 oslo
 oslo
 oslo
 oslo
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;hr /&gt;
 
@@ -686,9 +692,8 @@ oslo
 
 &lt;p&gt;Example:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[[ $(ls -al | grep &quot;oslo&quot;) = &quot;&quot; ]] &amp;amp;&amp;amp; echo &quot;not found&quot; || echo &quot;found it&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[[ $(ls -al | grep &quot;oslo&quot;) = &quot;&quot; ]] &amp;amp;&amp;amp; echo &quot;not found&quot; || echo &quot;found it&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;多行的範例&lt;/p&gt;
 
@@ -696,7 +701,7 @@ oslo
   &lt;p&gt;如果怕一行太多的話，可以最後面使用跳脫字元 &lt;code class=&quot;highlighter-rouge&quot;&gt;\&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;VARIABLE=$(ls -al | grep &quot;oslo&quot;);
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;VARIABLE=$(ls -al | grep &quot;oslo&quot;);
 if [[ &quot;$VARIABLE&quot; == &quot;&quot; ]];
     then
         echo &quot;not found&quot;
@@ -704,8 +709,7 @@ if [[ &quot;$VARIABLE&quot; == &quot;&quot; ]];
         echo &quot;found it&quot;
 fi
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13781216/bash-meaning-of-too-many-arguments-error-from-if-square-brackets&quot;&gt;參考&lt;/a&gt;&lt;/p&gt;
 
@@ -713,9 +717,8 @@ fi
 
 &lt;p&gt;find 是我覺得真的非常好用的功能，可以找整個資料夾下的所有特定檔案，真的超方便的&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -name &quot;*.png&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find . -type f -name &quot;*.png&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; 代表當前目錄&lt;/li&gt;
@@ -729,25 +732,23 @@ fi
 
 &lt;p&gt;最後提醒大家，如果想看說明文件的話可以用&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man &amp;lt;你要的內建指令&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man &amp;lt;你要的內建指令&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Example:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man ls
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;man ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;離開的話按 q 即可&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary>Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function</summary></entry><entry><title>如何使用 Machine-Learning 去處理一些非規則性的資料</title><link href="/using-ML-parsing-MOEA-pdf/" rel="alternate" type="text/html" title="如何使用 Machine-Learning 去處理一些非規則性的資料" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>/using-ML-parsing-MOEA-pdf</id><content type="html" xml:base="/using-ML-parsing-MOEA-pdf/">&lt;p&gt;在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 &lt;code class=&quot;highlighter-rouge&quot;&gt;MOEA&lt;/code&gt; 就是其中一個我們會利用的資料。&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary type="html">Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function</summary></entry><entry><title type="html">如何使用 Machine-Learning 去處理一些非規則性的資料</title><link href="http://localhost:4000/using-ML-parsing-MOEA-pdf/" rel="alternate" type="text/html" title="如何使用 Machine-Learning 去處理一些非規則性的資料" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>http://localhost:4000/using-ML-parsing-MOEA-pdf</id><content type="html" xml:base="http://localhost:4000/using-ML-parsing-MOEA-pdf/">&lt;p&gt;在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 &lt;code class=&quot;highlighter-rouge&quot;&gt;MOEA&lt;/code&gt; 就是其中一個我們會利用的資料。&lt;/p&gt;
 
 &lt;p&gt;MOEA 會在每個月10號釋出一些公司或者商業的登記資料，這些資料的格式是 &lt;code class=&quot;highlighter-rouge&quot;&gt;PDF&lt;/code&gt;，內容則有點像是 &lt;code class=&quot;highlighter-rouge&quot;&gt;EXCEL&lt;/code&gt;的樣式。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;分析資料&lt;/h2&gt;
+&lt;h2 id=&quot;分析資料&quot;&gt;分析資料&lt;/h2&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;工具&lt;/h3&gt;
+&lt;h3 id=&quot;工具&quot;&gt;工具&lt;/h3&gt;
 &lt;p&gt;所謂工欲善其事，必先利其器，分析之前要先準備好工具&lt;/p&gt;
 
 &lt;p&gt;而處理的工具，我們使用的是 &lt;code class=&quot;highlighter-rouge&quot;&gt;python&lt;/code&gt;，下面列出最主要的工具&lt;/p&gt;
@@ -758,14 +759,14 @@ fi
   &lt;li&gt;pandas/numpy/scipy python 數據分析的好用工具&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;思考&lt;/h3&gt;
+&lt;h3 id=&quot;思考&quot;&gt;思考&lt;/h3&gt;
 &lt;p&gt;謀定而後動，在開始處理資料之前，我們先來看看我們要處理的資料是什麼樣子&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/img/2016-5-8-using-ML-parsing-MOEA-pdf/1.png&quot; alt=&quot;pdf&quot; /&gt;
 上圖是 PDF 內其中一頁，可以看到大致上跟 &lt;code class=&quot;highlighter-rouge&quot;&gt;EXCEL&lt;/code&gt; 一樣，除了最後面&lt;code class=&quot;highlighter-rouge&quot;&gt;營業項目說明&lt;/code&gt;除外，而通常我們的觀念會想要最後一欄，歸類在同一行的營業人，也就是下圖的概念。
 &lt;img src=&quot;/img/2016-5-8-using-ML-parsing-MOEA-pdf/2.png&quot; alt=&quot;pdf&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;工具特性&lt;/h3&gt;
+&lt;h3 id=&quot;工具特性&quot;&gt;工具特性&lt;/h3&gt;
 &lt;p&gt;PDFMiner 是將PDF的內容變成座標形式回傳的，以下圖為例&lt;/p&gt;
 
 &lt;p&gt;『1』一個字就有一組四個&lt;code class=&quot;highlighter-rouge&quot;&gt;(x, y)&lt;/code&gt;座標，座標是由左下角開始，x往右變大，y往上變大
@@ -780,7 +781,7 @@ fi
   &lt;li&gt;L 表示兩個『詞』之間的垂直距離，如果大於某個值會判斷成兩個斷行&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;section-4&quot;&gt;資料特性&lt;/h3&gt;
+&lt;h3 id=&quot;資料特性&quot;&gt;資料特性&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&quot;/img/2016-5-8-using-ML-parsing-MOEA-pdf/2.png&quot; alt=&quot;pdf&quot; /&gt;
 上圖可以很清楚地知道，欄位其實在某些地方有些不一樣(藍色線標明的地方)，像是名字因為兩個字置中而導致起始位置跟三個字的地方有些不一樣，大部分欄位都是靠左對齊，資本額的地方卻是靠右對齊，造成起始座標很難歸納出一個範圍。&lt;/p&gt;
 
@@ -793,7 +794,7 @@ fi
   &lt;li&gt;y的高度 (484, 515] 屬於最下面序號『8』的營業人&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&quot;section-5&quot;&gt;解決問題&lt;/h2&gt;
+&lt;h2 id=&quot;解決問題&quot;&gt;解決問題&lt;/h2&gt;
 &lt;p&gt;上述提到一個問題，欄位因為起始點不同，所以很難歸納出真正的範圍，這時候機器學習就派上用場了&lt;/p&gt;
 
 &lt;p&gt;我們要解決的是分群的問題，分群常用的方法就屬於 &lt;code class=&quot;highlighter-rouge&quot;&gt;KNN&lt;/code&gt; 了，&lt;code class=&quot;highlighter-rouge&quot;&gt;KNN&lt;/code&gt; 是一種非監督式的機器學習演算法，簡單來說就是物以類聚的概念，我們利用未知座標 X 最鄰近的 N 個點來判斷 X 是屬於哪一個群組，以下圖為例
@@ -817,10 +818,10 @@ fi
 &lt;img src=&quot;/img/2016-5-8-using-ML-parsing-MOEA-pdf/KNN_10_STEP_3.png&quot; alt=&quot;pdf&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;這裡可以看出 N 在 1~2 之間的效果會比 4 以上效果來得好，我們可以利用畫出來的結果來決定使用的 N 值
-然而這只有三頁的資料，就可以產生相當程度的分類，機器學習的前途果然不可限量啊！！&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 MOEA 就是其中一個我們會利用的資料。</summary></entry><entry><title>MySQL Indexing 的差別</title><link href="/MySQL-indexing-Story/" rel="alternate" type="text/html" title="MySQL Indexing 的差別" /><published>2016-04-25T00:00:00+08:00</published><updated>2016-04-25T00:00:00+08:00</updated><id>/MySQL-indexing-Story</id><content type="html" xml:base="/MySQL-indexing-Story/">&lt;p&gt;我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
+然而這只有三頁的資料，就可以產生相當程度的分類，機器學習的前途果然不可限量啊！！&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 MOEA 就是其中一個我們會利用的資料。</summary></entry><entry><title type="html">MySQL Indexing 的差別</title><link href="http://localhost:4000/MySQL-indexing-Story/" rel="alternate" type="text/html" title="MySQL Indexing 的差別" /><published>2016-04-25T00:00:00+08:00</published><updated>2016-04-25T00:00:00+08:00</updated><id>http://localhost:4000/MySQL-indexing-Story</id><content type="html" xml:base="http://localhost:4000/MySQL-indexing-Story/">&lt;p&gt;我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
 這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;舉個例子&lt;/h3&gt;
+&lt;h3 id=&quot;舉個例子&quot;&gt;舉個例子&lt;/h3&gt;
 &lt;blockquote&gt;
   &lt;p&gt;我有username 和 timestamp 的index，當 sql 語法下 where 的時候，MySQL 會根據你的資料量來選擇你適合的 index
 假設以 username 撈出來會有200萬筆，timestamp 撈出來會有500萬筆，這時候 MySQL 會選擇使用 username 來做 index 的 key&lt;/p&gt;
@@ -839,15 +840,13 @@ fi
 
 &lt;p&gt;&lt;a href=&quot;https://docs.djangoproject.com/en/1.9/ref/models/options/#index-together&quot;&gt;Django Reference&lt;/a&gt;&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Meta:
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Meta:
   index_together = [
       [&quot;username&quot;, &quot;timestamp&quot;],
   ]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;這樣即可設定完成&lt;/p&gt;
 
 &lt;h1 id=&quot;reference&quot;&gt;Reference&lt;/h1&gt;
 &lt;p&gt;indexing 的方法有兩種，也有些差異，可以參考
-&lt;a href=&quot;https://www.percona.com/blog/2014/01/03/multiple-column-index-vs-multiple-indexes-with-mysql-56/&quot;&gt;這裡&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary>我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。
-這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。</summary></entry></feed>
+&lt;a href=&quot;https://www.percona.com/blog/2014/01/03/multiple-column-index-vs-multiple-indexes-with-mysql-56/&quot;&gt;這裡&lt;/a&gt;&lt;/p&gt;</content><author><name>oslo0322</name></author><summary type="html">我們都知道 MySQL 的 index 很重要，會影響 query 的速度，設定 index 的時候，通常直覺會直接對 columns(fields) 直接下index。 這樣的做法在一般情形下當然是ok，速度也都還可以接受，但是當資料成長到千萬筆以上的時候，就開始出現問題了，MySQL 在index 的選擇並不會很聰明地將 index 合併在一起。</summary></entry></feed>
