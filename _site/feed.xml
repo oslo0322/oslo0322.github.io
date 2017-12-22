@@ -1,6 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-12-21T08:49:00+08:00</updated><id>http://localhost:4000/</id><title type="html">oslo0322.github.io</title><subtitle>Backend Developer</subtitle><entry><title type="html">Interview Questions for Backend developer.</title><link href="http://localhost:4000/interview-questions/" rel="alternate" type="text/html" title="Interview Questions for Backend developer." /><published>2017-12-19T00:00:00+08:00</published><updated>2017-12-19T00:00:00+08:00</updated><id>http://localhost:4000/interview-questions</id><content type="html" xml:base="http://localhost:4000/interview-questions/">&lt;p&gt;最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-12-22T17:52:32+08:00</updated><id>http://localhost:4000/</id><title type="html">Notes</title><subtitle>Shao Chun Lu's Notes.</subtitle><author><name>Shao Chun Lu</name></author><entry><title type="html">Interview Questions for Backend developer.</title><link href="http://localhost:4000/interview-questions/" rel="alternate" type="text/html" title="Interview Questions for Backend developer." /><published>2017-12-19T00:00:00+08:00</published><updated>2017-12-19T00:00:00+08:00</updated><id>http://localhost:4000/interview-questions</id><content type="html" xml:base="http://localhost:4000/interview-questions/">&lt;p&gt;最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。&lt;/p&gt;
 
-&lt;h1 id=&quot;process-vs-thread&quot;&gt;Process vs Thread&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;Process vs Thread&lt;/li&gt;
+  &lt;li&gt;What’s the different between HTTP methods POST and GET?&lt;/li&gt;
+  &lt;li&gt;What is REST and RESTful?&lt;/li&gt;
+  &lt;li&gt;How CSRF token be generated?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;process-vs-thread&quot;&gt;Process vs Thread&lt;/h2&gt;
 &lt;p&gt;這大概是問最多的基本題吧，就連 &lt;a href=&quot;https://stackoverflow.com/questions/200469/what-is-the-difference-between-a-process-and-a-thread?page=1&amp;amp;tab=votes#tab-top&quot;&gt;StackOverflow&lt;/a&gt; 上面也是超多人在問的。&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/library/windows/desktop/ms681917(v=vs.85).aspx&quot;&gt;微軟提供的&lt;/a&gt;&lt;/li&gt;
@@ -27,9 +34,9 @@
 
 &lt;p&gt;國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。&lt;/p&gt;
 
-&lt;h2 id=&quot;process-vs-thread-筆記&quot;&gt;Process vs Thread 筆記&lt;/h2&gt;
+&lt;h3 id=&quot;筆記&quot;&gt;筆記&lt;/h3&gt;
 
-&lt;h3 id=&quot;apache&quot;&gt;Apache&lt;/h3&gt;
+&lt;h4 id=&quot;apache&quot;&gt;Apache&lt;/h4&gt;
 &lt;p&gt;後來又看到 &lt;a href=&quot;http://modwsgi.readthedocs.io/en/develop/user-guides/processes-and-threading.html&quot;&gt;mode_wsgi的這篇&lt;/a&gt;，裡面提到了Apache提供了三種不同的Mode&lt;/p&gt;
 
 &lt;table&gt;
@@ -60,16 +67,14 @@
 &lt;/table&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。&lt;/p&gt;
+&lt;p&gt;Worker 文件也提到了 &lt;a href=&quot;https://wiki.python.org/moin/GlobalInterpreterLock&quot;&gt;Python GIL&lt;/a&gt; 的問題，裡面說法是因為中間是由 mod_uswgi 做中介給Apache，所以 Thread 以及 Process 是由 Apache(C code)管理，而不是 Python，所以在Multi-Core CPU表現上會比較好。&lt;/p&gt;
 
 &lt;p&gt;我也好奇 Worker 是如何產生 Process/Thread 的，其實概念也蠻簡單的，就是先把Process 內的 Thread 塞滿，滿了之後再開 Child Process 依此類推。&lt;/p&gt;
 
-&lt;h3 id=&quot;nginx&quot;&gt;Nginx&lt;/h3&gt;
+&lt;h4 id=&quot;nginx&quot;&gt;Nginx&lt;/h4&gt;
 &lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/Python/comments/4s40ge/understanding_uwsgi_threads_processes_and_gil/&quot;&gt;Nginx+uWSGI&lt;/a&gt; 這篇看來，uWSGI則沒有處理 GIL 的問題，如果有碰到 I/O bound的問題，看來還是只能乖乖地關掉 thread 了(QQ)&lt;/p&gt;
 
-&lt;p&gt;[Python GIL]https://wiki.python.org/moin/GlobalInterpreterLock&lt;/p&gt;
-
-&lt;h1 id=&quot;whats-the-different-between-http-methods-post-and-get&quot;&gt;What’s the different between HTTP methods POST and GET?&lt;/h1&gt;
+&lt;h2 id=&quot;whats-the-different-between-http-methods-post-and-get&quot;&gt;What’s the different between HTTP methods POST and GET?&lt;/h2&gt;
 
 &lt;p&gt;一開始的想法比較像是用 &lt;a href=&quot;https://en.wikipedia.org/wiki/Representational_state_transfer&quot;&gt;REST&lt;/a&gt; 的想法用 &lt;code class=&quot;highlighter-rouge&quot;&gt;Resource&lt;/code&gt; 的角度去描述的，但後來對方問更深，就倒了…&lt;/p&gt;
 
@@ -117,7 +122,7 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h1 id=&quot;what-is-rest-and-restful&quot;&gt;What is REST and RESTful?&lt;/h1&gt;
+&lt;h2 id=&quot;what-is-rest-and-restful&quot;&gt;What is REST and RESTful?&lt;/h2&gt;
 
 &lt;p&gt;REST 是 &lt;code class=&quot;highlighter-rouge&quot;&gt;Representational State Transfer&lt;/code&gt; 的縮寫，是一種傳輸資料的『風格』不是一種『標準』，利用 HTTP methods(GET/POST/PUT/PATCH/DELETE) 等等不同的操作來對伺服器的資源做管理。
 具有幾個特點：&lt;/p&gt;
@@ -133,7 +138,8 @@
 
 &lt;p&gt;而具有 &lt;code class=&quot;highlighter-rouge&quot;&gt;REST&lt;/code&gt; 風格的API，就是 RESTful API。&lt;/p&gt;
 
-&lt;h1 id=&quot;how-csrf-token-be-generated&quot;&gt;How CSRF token be generated?&lt;/h1&gt;
+&lt;h2 id=&quot;how-csrf-token-be-generated&quot;&gt;How CSRF token be generated?&lt;/h2&gt;
+
 &lt;p&gt;上次被問到如何解決 CSRF 攻擊的問題，我提到了利用 CSRF token 可以解決，而對方問到了更深入，那你知道 CSRF token 是如何產生的嗎？
 當初猜是類似用 One-Time password 到方式，伺服器端有存密鑰，然後依照時間產生一組時間內有效的 token 放在 Database 內。&lt;/p&gt;
 
@@ -145,7 +151,7 @@
 
 &lt;p&gt;在&lt;a href=&quot;https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#General_Recommendation:_Synchronizer_Token_Pattern&quot;&gt;這裡&lt;/a&gt;提到&lt;/p&gt;
 
-&lt;h4 id=&quot;synchronizer-csrf-tokens&quot;&gt;Synchronizer (CSRF) Tokens&lt;/h4&gt;
+&lt;h3 id=&quot;synchronizer-csrf-tokens&quot;&gt;Synchronizer (CSRF) Tokens&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Any state changing operation requires a secure random token (e.g., CSRF token) to prevent CSRF attacks&lt;/li&gt;
   &lt;li&gt;Characteristics of a CSRF Token&lt;/li&gt;
@@ -171,7 +177,7 @@
 &lt;p&gt;查看了一下MySQL lib原始碼內實作時間轉換的程式&lt;/p&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MySQLConverter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MySQLConverterBase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;省略&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;# ...(省略)...&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;to_mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Convert Python data type to MySQL&quot;&quot;&quot;&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__class__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
@@ -180,7 +186,7 @@
         &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;AttributeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;TypeError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Python '{0}' cannot be converted to a &quot;&lt;/span&gt;
                             &lt;span class=&quot;s&quot;&gt;&quot;MySQL type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;省略&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;# ...(省略)...&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_datetime_to_mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
         Converts a datetime instance to a string suitable for MySQL.
@@ -452,13 +458,13 @@
 
 &lt;p&gt;這點在 Numpy 上會很好作業，也只要一行就可以達成了&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def consecutive(data, step_size=1):
-    &quot;&quot;&quot;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;consecutive&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;step_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
     :param data:
     :param int step_size: split size
     :rtype: np.array
-    &quot;&quot;&quot;
-    return np.array(np.split(np.array(data), np.where(np.diff(data) != step_size)[0] + 1))
+    &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;where&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;step_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;blockquote&gt;
@@ -482,16 +488,16 @@
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;[1, 2, 3, 4, 5]&lt;/code&gt; 的 array 想要變成 &lt;code class=&quot;highlighter-rouge&quot;&gt;[[1, 2], [2, 3], [3, 4], [4, 5]]&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##  特別注意：如果陣列小於 window 會出現問題。
-def rolling_window(data_series, window):
-    &quot;&quot;&quot;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;##  特別注意：如果陣列小於 window 會出現問題。&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rolling_window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
     :param np.array data_series:
     :param int window:
     :rtype: np.array
-    &quot;&quot;&quot;
-    shape = data_series.shape[:-1] + (data_series.shape[-1] - window + 1, window)
-    strides = data_series.strides + (data_series.strides[-1],)
-    return np.lib.stride_tricks.as_strided(data_series, shape=shape, strides=strides)
+    &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data_series&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_series&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data_series&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_series&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lib&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stride_tricks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as_strided&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
@@ -499,12 +505,12 @@ def rolling_window(data_series, window):
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;strides&lt;/code&gt; 代表字符的 byte 的組數&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1, 3, 5, 7])
-&amp;gt;&amp;gt;&amp;gt; a.strides
-(8, )
-&amp;gt;&amp;gt;&amp;gt; b = np.array([1, 3, 5, 7], [2, 2, 3, 4])
-&amp;gt;&amp;gt;&amp;gt; b.strides
-(32, 8)
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strides&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;blockquote&gt;
@@ -535,9 +541,9 @@ def rolling_window(data_series, window):
 
 &lt;p&gt;rolling_window我們預期想要的結果是將結果多一個維度，以一維陣列來說&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = np.array([1,2,3,4])
-&amp;gt;&amp;gt;&amp;gt; rolling_window(a, 2)  #  兩個元素為一組來切
-[[1,2], [2,3], [3,4]]   #  預期結果
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rolling_window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;#  兩個元素為一組來切&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;   &lt;span class=&quot;c&quot;&gt;#  預期結果&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;所以&lt;/p&gt;
@@ -551,10 +557,10 @@ def rolling_window(data_series, window):
 
 &lt;p&gt;是因為原本只有 4 個數值，最後要變成 6 個數值，如果是 (16, 8) 組的話會變成&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Out[66]:
-array([[         1,          2],
-       [         3,          4],
-       [4459105896, 4459105896]])
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;66&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([[&lt;/span&gt;         &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+       &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;         &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;          &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+       &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4459105896&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4459105896&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;就會變成 &lt;code class=&quot;highlighter-rouge&quot;&gt;(8, )&lt;/code&gt; 組，會變成 reshape 直接對半切開，少的用 int64 最大值補上&lt;/p&gt;
@@ -630,16 +636,9 @@ In this case, the server name is searched among the described server groups, and
   &lt;p&gt;Tips：&lt;/p&gt;
 
   &lt;p&gt;如果想要 packaging/update 主要的程式的話，可以將上述包好的檔案(zip)檔案，下載回來再自行刪除，更新或者增加上去&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary type="html">AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</summary></entry><entry><title type="html">Bash Script 的一些簡單範例 Part 1</title><link href="http://localhost:4000/bash-script-simple-example/" rel="alternate" type="text/html" title="Bash Script 的一些簡單範例 Part 1" /><published>2016-06-07T00:00:00+08:00</published><updated>2016-06-07T00:00:00+08:00</updated><id>http://localhost:4000/bash-script-simple-example</id><content type="html" xml:base="http://localhost:4000/bash-script-simple-example/">&lt;h2 id=&quot;bash-script-是-unix-系統內最好也最實用的內建語言常常有些意想不到的-function&quot;&gt;Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function&lt;/h2&gt;
+&lt;/blockquote&gt;</content><author><name>oslo0322</name></author><summary type="html">AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</summary></entry><entry><title type="html">Bash Script 的一些簡單範例</title><link href="http://localhost:4000/bash-script-simple-example/" rel="alternate" type="text/html" title="Bash Script 的一些簡單範例" /><published>2016-06-07T00:00:00+08:00</published><updated>2016-06-07T00:00:00+08:00</updated><id>http://localhost:4000/bash-script-simple-example</id><content type="html" xml:base="http://localhost:4000/bash-script-simple-example/">&lt;p&gt;Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function&lt;/p&gt;
 
-&lt;h3 id=&quot;outline&quot;&gt;Outline&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;grep + awk&lt;/li&gt;
-  &lt;li&gt;if else&lt;/li&gt;
-  &lt;li&gt;find&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;grep--awk&quot;&gt;grep + awk&lt;/h4&gt;
+&lt;h2 id=&quot;grep--awk&quot;&gt;grep + awk&lt;/h2&gt;
 &lt;p&gt;Example : &lt;code class=&quot;highlighter-rouge&quot;&gt;ls -al&lt;/code&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-rw-r--r--   1 oslo  staff   327 Jun  7 23:44 404.md
@@ -678,7 +677,7 @@ oslo
 
 &lt;hr /&gt;
 
-&lt;h4 id=&quot;if-else&quot;&gt;if else&lt;/h4&gt;
+&lt;h2 id=&quot;if-else&quot;&gt;if else&lt;/h2&gt;
 
 &lt;p&gt;判斷式，判斷是有分一行還是多行&lt;/p&gt;
 
@@ -713,7 +712,7 @@ fi
 
 &lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/questions/13781216/bash-meaning-of-too-many-arguments-error-from-if-square-brackets&quot;&gt;參考&lt;/a&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;find&quot;&gt;find&lt;/h4&gt;
+&lt;h2 id=&quot;find&quot;&gt;find&lt;/h2&gt;
 
 &lt;p&gt;find 是我覺得真的非常好用的功能，可以找整個資料夾下的所有特定檔案，真的超方便的&lt;/p&gt;
 

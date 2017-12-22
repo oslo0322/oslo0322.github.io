@@ -1,63 +1,305 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.8.0 by Michael Rose
+  Copyright 2017 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE.txt
+-->
+<html lang="en" class="no-js">
   <head>
-    <title>在 AWS Lambda python 執行帶有 C module 的 libs – Oslo – Backend Developer</title>
+    <meta charset="utf-8">
 
-        <meta charset="utf-8" />
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+<!-- begin SEO -->
 
-    
-    <meta name="description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。
 
-" />
-    <meta property="og:description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。
 
-" />
-    
-    <meta name="author" content="Oslo" />
 
-    
-    <meta property="og:title" content="在 AWS Lambda python 執行帶有 C module 的 libs" />
-    <meta property="twitter:title" content="在 AWS Lambda python 執行帶有 C module 的 libs" />
-    
 
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
-    <link rel="stylesheet" type="text/css" href="/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="Oslo - Backend Developer" href="/feed.xml" />
 
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+
+
+<title>在 AWS Lambda python 執行帶有 C module 的 libs - Notes</title>
+
+
+
+
+<meta name="description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。">
+
+
+
+
+<meta name="author" content="oslo0322">
+
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Notes">
+<meta property="og:title" content="在 AWS Lambda python 執行帶有 C module 的 libs">
+
+
+  <link rel="canonical" href="http://localhost:4000/aws-lambda-with-c-module/">
+  <meta property="og:url" content="http://localhost:4000/aws-lambda-with-c-module/">
+
+
+
+  <meta property="og:description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-06-11T00:00:00+08:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Shao Chun Lu",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Notes Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
   </head>
 
-  <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="/" class="site-avatar"><img src="https://avatars3.githubusercontent.com/u/5058547?v=3&s=460" /></a>
+  <body class="layout--single">
 
-          <div class="site-info">
-            <h1 class="site-name"><a href="/">Oslo</a></h1>
-            <p class="site-description">Backend Developer</p>
-          </div>
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
 
-          <nav>
-            <a href="/">Blog</a>
-            <a href="/about">About</a>
-          </nav>
-        </header>
-      </div>
+    <div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <a class="site-title" href="http://localhost:4000/">Notes</a>
+        <ul class="visible-links">
+          
+            
+            <li class="masthead__menu-item">
+              <a href="https://github.com/oslo0322/" >About</a>
+            </li>
+          
+        </ul>
+        
+        <button class="greedy-nav__toggle" type="button">
+          <span class="visually-hidden">Toggle Menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
     </div>
+  </div>
+</div>
 
-    <div id="main" role="main" class="container">
-      <article class="post">
-  <h1>在 AWS Lambda python 執行帶有 C module 的 libs</h1>
+    <div class="initial-content">
+      
 
-  <div class="entry">
-    <p>AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</p>
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Shao Chun Lu</h3>
+    
+    
+      <p class="author__bio" itemprop="description">
+        Backend Developer
+      </p>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="http://schema.org/Place">
+          <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Taiwan</span>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.linkedin.com/in/lu-shao-chun" itemprop="sameAs">
+            <i class="fa fa-fw fa-linkedin-square" aria-hidden="true"></i> LinkedIn
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/oslo0322" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs">
+      <i class="fa fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="在 AWS Lambda python 執行帶有 C module 的 libs">
+    <meta itemprop="description" content="AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。">
+    <meta itemprop="datePublished" content="June 11, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">在 AWS Lambda python 執行帶有 C module 的 libs
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>AWS Lambda 是一個很好用(邪惡?!)的東西，很多東西都可以用 Lambda 串起來，來達成event trigger 的目的，然而有個小小的缺點就是，很難開發跟 debug (CloudWatch)，所有執行的程式碼都放在 Lambda (可能實作上用docker?!)上。</p>
 
 <p>如果你是用 Mac OSX 系統開發的話，在一般情形下，只要照 <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html">AWS 官方文件</a>上建議的方法，包成zip，就可以執行了，但要用含有 C module 的 libs，像是 Matplotlib, Pandas, Numpy, Scipy 等等的，就會遇到意想不到的事情。</p>
 
@@ -69,38 +311,224 @@
   <p>如果想要 packaging/update 主要的程式的話，可以將上述包好的檔案(zip)檔案，下載回來再自行刪除，更新或者增加上去</p>
 </blockquote>
 
-  </div>
+        
+      </section>
 
-  <div class="date">
-    Written on June 11, 2016
-  </div>
+      <footer class="page__meta">
+        
+        
 
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-06-11T00:00:00+08:00">June 11, 2016</time></p>
+        
+      </footer>
+
+      <section class="page__share">
   
-</article>
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E5%9C%A8+AWS+Lambda+python+%E5%9F%B7%E8%A1%8C%E5%B8%B6%E6%9C%89+C+module+%E7%9A%84+libs%20http%3A%2F%2Flocalhost%3A4000%2Faws-lambda-with-c-module%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Faws-lambda-with-c-module%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%3A4000%2Faws-lambda-with-c-module%2F" class="btn btn--google-plus" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Faws-lambda-with-c-module%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/bash-script-simple-example/" class="pagination--pager" title="Bash Script 的一些簡單範例
+">Previous</a>
+    
+    
+      <a href="http://localhost:4000/aws-elb-nginx/" class="pagination--pager" title="AWS 的 ELB 與 Nginx 的愛恨糾葛
+">Next</a>
+    
+  </nav>
 
     </div>
 
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
           
 
 
 
-<a href="https://github.com/oslo0322"><i class="svg-icon github"></i></a>
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/interview-questions/" rel="permalink">Interview Questions for Backend developer.
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
 
 
 
 
+  5 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/override-decorator/" rel="permalink">Using another decorator inherit the decorator in python.
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
 
 
 
 
-        </footer>
+  6 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">最近碰到一個有趣的問題，導致想要做一個很奇怪的事情，想要在用一個 Decorator 去繼承另一個 Decorator，並加上一些東西。
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/vpc-introduce/" rel="permalink">介紹 AWS 雲端架構
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">在開始介紹之前，先來談談一般常見的公司架構吧
+
+</p>
+  </article>
+</div>
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/mongodb-migrated-note/" rel="permalink">Zero downtime migrate mongodb to a larger disk space
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">好久沒寫筆記了，趁這假日的空擋，來寫寫這次遭遇的事件
+
+</p>
+  </article>
+</div>
+        
       </div>
+    </div>
+  
+</div>
+
     </div>
 
     
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="https://github.com/oslo0322"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Shao Chun Lu. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+  
+
+
 
   </body>
 </html>

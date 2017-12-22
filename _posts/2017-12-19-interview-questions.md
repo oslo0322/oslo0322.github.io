@@ -1,12 +1,20 @@
 ---
-layout: post
+layout: single
 title: Interview Questions for Backend developer.
 author: oslo0322
+toc: true
+toc_label: "Unique Title"
+toc_icon: "heart"
 ---
 
 最近因為各種原因，短短幾個月內就一直在面試，就記錄一下最近碰到得面試題目吧。
 
-# Process vs Thread
+* Process vs Thread
+* What's the different between HTTP methods POST and GET?
+* What is REST and RESTful?
+* How CSRF token be generated?
+
+## Process vs Thread
 這大概是問最多的基本題吧，就連 [StackOverflow] 上面也是超多人在問的。
 * [微軟提供的]
 * [Others]
@@ -27,9 +35,9 @@ author: oslo0322
 
 國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。
 
-## Process vs Thread 筆記
+### 筆記
 
-### Apache
+#### Apache
 後來又看到 [mode_wsgi的這篇]，裡面提到了Apache提供了三種不同的Mode
 
 ||Multi-Process|Multi-Thread|
@@ -43,7 +51,7 @@ Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間
 
 我也好奇 Worker 是如何產生 Process/Thread 的，其實概念也蠻簡單的，就是先把Process 內的 Thread 塞滿，滿了之後再開 Child Process 依此類推。
 
-### Nginx
+#### Nginx
 [Nginx+uWSGI] 這篇看來，uWSGI則沒有處理 GIL 的問題，如果有碰到 I/O bound的問題，看來還是只能乖乖地關掉 thread 了(QQ)
 
 
@@ -57,10 +65,10 @@ Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間
 
 [Nginx+uWSGI]: https://www.reddit.com/r/Python/comments/4s40ge/understanding_uwsgi_threads_processes_and_gil/
 
-[Python GIL]https://wiki.python.org/moin/GlobalInterpreterLock
+[Python GIL]: https://wiki.python.org/moin/GlobalInterpreterLock
 
 
-# What's the different between HTTP methods POST and GET?
+## What's the different between HTTP methods POST and GET?
 
 一開始的想法比較像是用 [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) 的想法用 `Resource` 的角度去描述的，但後來對方問更深，就倒了...
 
@@ -75,7 +83,7 @@ Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間
 |Data length 限制|2048個字元上限|無|
 |**Cached**|Yes|No|
 
-# What is REST and RESTful?
+## What is REST and RESTful?
 
 REST 是 `Representational State Transfer` 的縮寫，是一種傳輸資料的『風格』不是一種『標準』，利用 HTTP methods(GET/POST/PUT/PATCH/DELETE) 等等不同的操作來對伺服器的資源做管理。
 具有幾個特點：
@@ -89,7 +97,8 @@ REST 是 `Representational State Transfer` 的縮寫，是一種傳輸資料的
 
 而具有 `REST` 風格的API，就是 RESTful API。
 
-# How CSRF token be generated?
+## How CSRF token be generated?
+
 上次被問到如何解決 CSRF 攻擊的問題，我提到了利用 CSRF token 可以解決，而對方問到了更深入，那你知道 CSRF token 是如何產生的嗎？
 當初猜是類似用 One-Time password 到方式，伺服器端有存密鑰，然後依照時間產生一組時間內有效的 token 放在 Database 內。
 
@@ -101,7 +110,7 @@ REST 是 `Representational State Transfer` 的縮寫，是一種傳輸資料的
 
 在[這裡][1]提到
 
-#### Synchronizer (CSRF) Tokens
+### Synchronizer (CSRF) Tokens
 * Any state changing operation requires a secure random token (e.g., CSRF token) to prevent CSRF attacks
 * Characteristics of a CSRF Token
 * Unique per user ***session***

@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: splash
 title: Using another decorator inherit the decorator in python.
 author: oslo0322
 ---
@@ -20,7 +20,7 @@ author: oslo0322
 
 ``` python
 class MySQLConverter(MySQLConverterBase):
-    ...(省略)...
+    # ...(省略)...
     def to_mysql(self, value):
         """Convert Python data type to MySQL"""
         type_name = value.__class__.__name__.lower()
@@ -29,7 +29,7 @@ class MySQLConverter(MySQLConverterBase):
         except AttributeError:
             raise TypeError("Python '{0}' cannot be converted to a "
                             "MySQL type".format(type_name))
-    ...(省略)...
+    # ...(省略)...
     def _datetime_to_mysql(self, value):
         """
         Converts a datetime instance to a string suitable for MySQL.

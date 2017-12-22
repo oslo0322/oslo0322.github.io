@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: 介紹 AWS 雲端架構 
 author: oslo0322
 ---

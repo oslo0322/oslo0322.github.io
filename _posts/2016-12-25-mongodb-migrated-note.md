@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: Zero downtime migrate mongodb to a larger disk space
 author: oslo0322
 ---

@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: MySQL Indexing 的差別
 author: oslo0322
 ---

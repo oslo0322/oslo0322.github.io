@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: 在 AWS Lambda python 執行帶有 C module 的 libs
 author: oslo0322
 ---

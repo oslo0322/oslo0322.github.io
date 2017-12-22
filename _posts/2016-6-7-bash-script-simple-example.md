@@ -1,17 +1,15 @@
 ---
-layout: post
-title: Bash Script 的一些簡單範例 Part 1
+layout: single
+title: Bash Script 的一些簡單範例
 author: oslo0322
+toc: true
+toc_label: "Unique Title"
+toc_icon: "heart"
 ---
 
-## Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function
+Bash Script 是 Unix 系統內最好也最實用的內建語言，常常有些意想不到的 function
 
-### Outline
- * grep + awk
- * if else
- * find
-
-#### grep + awk
+## grep + awk
 Example : `ls -al`
 
 ```
@@ -53,7 +51,7 @@ oslo
 
 ---
 
-#### if else
+## if else
 
 判斷式，判斷是有分一行還是多行
 
@@ -86,7 +84,7 @@ fi
 
 [參考](http://stackoverflow.com/questions/13781216/bash-meaning-of-too-many-arguments-error-from-if-square-brackets)
 
-#### find
+## find
 
 find 是我覺得真的非常好用的功能，可以找整個資料夾下的所有特定檔案，真的超方便的
 

@@ -1,7 +1,10 @@
 ---
-layout: post
+layout: single
 title: 數值分析名詞紀錄
 author: oslo0322
+toc: true
+toc_label: "Unique Title"
+toc_icon: "heart"
 ---
 
 # Story
@@ -15,7 +18,7 @@ author: oslo0322
 
 這點在 Numpy 上會很好作業，也只要一行就可以達成了
 
-```
+``` python
 def consecutive(data, step_size=1):
     """
     :param data:
@@ -38,7 +41,7 @@ Example:
 
 - `[1, 2, 3, 4, 5]` 的 array 想要變成 `[[1, 2], [2, 3], [3, 4], [4, 5]]`
 
-```
+``` python
 ##  特別注意：如果陣列小於 window 會出現問題。
 def rolling_window(data_series, window):
     """
@@ -54,7 +57,7 @@ def rolling_window(data_series, window):
  - `shape` 代表 array 的 (i, j)，此段主要是表示我切好後，array 應該是要長什麼模樣
  - `strides` 代表字符的 byte 的組數
 
-```
+``` python
 >>> a = np.array([1, 3, 5, 7])
 >>> a.strides
 (8, )
@@ -90,7 +93,7 @@ each array have 3 elements
 
 rolling_window我們預期想要的結果是將結果多一個維度，以一維陣列來說
 
-```
+``` python
 >>> a = np.array([1,2,3,4])
 >>> rolling_window(a, 2)  #  兩個元素為一組來切
 [[1,2], [2,3], [3,4]]   #  預期結果
@@ -105,7 +108,7 @@ rolling_window我們預期想要的結果是將結果多一個維度，以一維
 
 是因為原本只有 4 個數值，最後要變成 6 個數值，如果是 (16, 8) 組的話會變成
 
-```
+``` python
 Out[66]:
 array([[         1,          2],
        [         3,          4],

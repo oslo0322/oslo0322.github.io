@@ -1,7 +1,10 @@
 ---
-layout: post
+layout: single
 title: 如何使用 Machine-Learning 去處理一些非規則性的資料
 author: oslo0322
+toc: true
+toc_label: "Unique Title"
+toc_icon: "heart"
 ---
 
 在 iCHEF，我們會利用政府公開的資料做一些處理並加以利用，經濟部商業司(Ministry of Economic Affairs,R.O.C.) 以下簡稱 `MOEA` 就是其中一個我們會利用的資料。

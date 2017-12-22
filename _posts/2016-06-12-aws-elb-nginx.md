@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title: AWS 的 ELB 與 Nginx 的愛恨糾葛
 author: oslo0322
 ---
