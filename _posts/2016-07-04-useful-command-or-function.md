@@ -3,7 +3,6 @@ layout: single
 title: 數值分析名詞紀錄
 author: oslo0322
 toc: true
-toc_label: "Unique Title"
 toc_icon: "heart"
 ---
 

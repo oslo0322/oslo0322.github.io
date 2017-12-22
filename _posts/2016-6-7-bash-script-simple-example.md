@@ -3,7 +3,6 @@ layout: single
 title: Bash Script 的一些簡單範例
 author: oslo0322
 toc: true
-toc_label: "Unique Title"
 toc_icon: "heart"
 ---
 

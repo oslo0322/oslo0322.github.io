@@ -3,7 +3,6 @@ layout: single
 title: 如何使用 Machine-Learning 去處理一些非規則性的資料
 author: oslo0322
 toc: true
-toc_label: "Unique Title"
 toc_icon: "heart"
 ---
 

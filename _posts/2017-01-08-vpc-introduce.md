@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 介紹 AWS 雲端架構 
+title: 用日常用語來介紹雲端架構 
 author: oslo0322
 ---
 

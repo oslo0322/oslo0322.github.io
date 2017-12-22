@@ -3,7 +3,6 @@ layout: single
 title: Interview Questions for Backend developer.
 author: oslo0322
 toc: true
-toc_label: "Unique Title"
 toc_icon: "heart"
 ---
 
@@ -35,7 +34,7 @@ toc_icon: "heart"
 
 國道一號跟國道三號就是不同的 Process，國道內的線道就是不同的 Thread，國道內的所有車輛(程式)共用全部的縣道(Address Space)，而當國道一號發生車禍導致塞車的時候，其他車輛就會因此受到影響，但是國道三號的車卻不受影響。
 
-### 筆記
+### Notes
 
 #### Apache
 後來又看到 [mode_wsgi的這篇]，裡面提到了Apache提供了三種不同的Mode
@@ -83,7 +82,7 @@ Worker 文件也提到了 [Python GIL] 的問題，裡面說法是因為中間
 |Data length 限制|2048個字元上限|無|
 |**Cached**|Yes|No|
 
-## What is REST and RESTful?
+## What is REST or RESTful?
 
 REST 是 `Representational State Transfer` 的縮寫，是一種傳輸資料的『風格』不是一種『標準』，利用 HTTP methods(GET/POST/PUT/PATCH/DELETE) 等等不同的操作來對伺服器的資源做管理。
 具有幾個特點：
