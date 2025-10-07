@@ -1,0 +1,70 @@
+---
+layout: default
+---
+
+<div class="resume">
+  <header class="resume-header">
+    <h1 class="resume-name">{{ page.name }}</h1>
+    <h2 class="resume-title">{{ page.title }}</h2>
+    <div class="resume-contact">
+      <p>{{ page.phone }} | {{ page.email }}</p>
+      <div class="resume-links">
+        {% if page.linkedin %}<a href="{{ page.linkedin }}" target="_blank">LinkedIn</a>{% endif %}
+        {% if page.github %}<a href="{{ page.github }}" target="_blank">GitHub</a>{% endif %}
+        {% if page.blog %}<a href="{{ page.blog }}" target="_blank">Blog</a>{% endif %}
+        {% if page.medium %}<a href="{{ page.medium }}" target="_blank">Medium</a>{% endif %}
+      </div>
+    </div>
+  </header>
+
+  <section class="resume-section">
+    <h3>Technical Skills</h3>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <strong>Languages:</strong> {{ page.skills.languages }}
+      </div>
+      <div class="skill-category">
+        <strong>Frameworks:</strong> {{ page.skills.frameworks }}
+      </div>
+      <div class="skill-category">
+        <strong>Databases:</strong> {{ page.skills.databases }}
+      </div>
+      <div class="skill-category">
+        <strong>Cloud & DevOps:</strong> {{ page.skills.cloud_devops }}
+      </div>
+      <div class="skill-category">
+        <strong>Expertise:</strong> {{ page.skills.expertise }}
+      </div>
+    </div>
+  </section>
+
+  <section class="resume-section">
+    <h3>Professional Experience</h3>
+    {% for experience in page.experience %}
+    <div class="experience-item">
+      <div class="experience-header">
+        <h4>{{ experience.position }}</h4>
+        <div class="experience-company">{{ experience.company }}</div>
+        <div class="experience-location">{{ experience.location }}</div>
+        <div class="experience-dates">{{ experience.dates }}</div>
+      </div>
+      <ul class="experience-achievements">
+        {% for achievement in experience.achievements %}
+        <li>{{ achievement }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section class="resume-section">
+    <h3>Education</h3>
+    {% for education in page.education %}
+    <div class="education-item">
+      <h4>{{ education.degree }}</h4>
+      <div class="education-school">{{ education.school }}</div>
+      <div class="education-dates">{{ education.dates }}</div>
+    </div>
+    {% endfor %}
+  </section>
+</div>
